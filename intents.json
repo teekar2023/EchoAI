@@ -1,0 +1,322 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Whats Up",
+        "Howdy",
+        "Good Morning",
+        "Good Afternoon"
+      ],
+      "responses": [
+        "Hello!",
+        "Hi!",
+        "Hey!",
+        "Hi, how may i help you!"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "Goodbye",
+        "Cya",
+        "See you later",
+        "Good night",
+        "goodnight",
+        "exit",
+        "leave"
+      ],
+      "responses": [
+        "Goodbye!",
+        "Bye!",
+        "See you later!",
+        "Goodbye!, nice talking to you!"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "time",
+      "patterns": [
+        "What time is it",
+        "whats the time",
+        "what is the time",
+        "time"
+      ],
+      "responses": [
+        "It is ",
+        "The time is ",
+        "It is currently "
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "date",
+      "patterns": [
+        "What the date",
+        "date",
+        "date today",
+        "what is the date",
+        "today's date"
+      ],
+      "responses": [
+        "It is ",
+        "The date is ",
+        "Today is "
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks",
+        "Thank you",
+        "That's helpful"
+      ],
+      "responses": [
+        "Happy to help!",
+        "Any time!",
+        "My pleasure",
+        "Let me know if you need anything else!"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "facts",
+      "patterns": [
+        "Tell me a fun fact",
+        "fun fact",
+        "give me a fun fact"
+      ],
+      "responses": [
+        "The supreme court has it's own private basketball court called the 'Highest Court In The Land'!",
+        "Walmart has a lower acceptance rate than Harvard!",
+        "The technical name for the fear of long words is hippopotomonstrosesquippedaliophobia",
+        "A university in Michigan offers a unicorn hunting license!",
+        "Cows 'moo' with regional accents!"
+      ],
+      "context": [
+        "another one",
+        "another",
+        "one more"
+      ]
+    },
+    {
+      "tag": "age",
+      "patterns": [
+        "how old are you",
+        "whats your age",
+        "when were you born"
+      ],
+      "responses": [
+        "I don't age because I am a computer program but I was first created on December 11th 2020!"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "feeling",
+      "patterns": [
+        "How are you",
+        "how ya doing"
+      ],
+      "responses": [
+        "I'm doing fine, thanks for asking!",
+        "I'm fine, How may I help you?"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "who are you",
+      "patterns": [
+        "Who are you",
+        "what are you"
+      ],
+      "responses": [
+        "I'm ECHO, your personal assistant! You Can Learn More About Me By Using The About Button In The Echo Dropdown At The Top of The Window!"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "math",
+      "patterns": [
+        "+",
+        "-",
+        "*",
+        "/",
+        "^",
+        "sin of",
+        "cos of",
+        "sine of",
+        "cosine of",
+        "tangent of",
+        "what's x * x",
+        "what's x / x",
+        "whats x + x",
+        "what's x - x",
+        "what is x + x",
+        "what is x - x",
+        "what is x * x",
+        "what is x / x"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "wikipedia",
+      "patterns": [
+        "what is",
+        "what was",
+        "who was",
+        "what's"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "wolfram",
+      "patterns": [
+        "what is the",
+        "who is the",
+        "what was the",
+        "when was the",
+        "when is the",
+        "when's the",
+        "who's the",
+        "where is the",
+        "what's the",
+        "where's the"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "divide zero",
+      "patterns": [
+        "0 / 0"
+      ],
+      "responses": [
+        "That's Not Possible! Imagine that you have zero cookies,and you split them evenly among zero friends. How many cookies does each person get? See? It doesn't make sense. Cookie Monster Is Sad That There Are No Cookies And You Are Sad You Have No Friends!\n"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "days until holiday",
+      "patterns": [
+        "How many days until christmas",
+        "how many days until thanksgiving",
+        "how many days until easter",
+        "how many days until new years",
+        "how long until"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "who am i",
+      "patterns": [
+        "Who am i",
+        "what is my name",
+        "can you tell me who i am",
+        "do you know who i am"
+      ],
+      "responses": [
+        "You are",
+        "Your name is",
+        "Your "
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "weather local",
+      "patterns": [
+        "Whats the weather like",
+        "whats it like outside",
+        "hows the weather today",
+        "weather today",
+        "weather tomorrow"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "jokes",
+      "patterns": [
+        "tell me a joke",
+        "can you tell me a joke",
+        "say something funny",
+        "joke"
+      ],
+      "responses": [
+        "What type of shoes do frogs wear?\n Open Toad!",
+        "Why shouldn't you write with a broken pencil?\n Because it's pointless!",
+        "Why does a duck have tail feathers?\n To cover its butt quack!",
+        "What happens when a frog's car breaks down?\n It gets toad!",
+        "How do you make a tissue dance?\n You put a little boogie in it!"
+      ],
+      "context": [
+        "another one",
+        "another",
+        "one more"
+      ]
+    },
+    {
+      "tag": "contacts",
+      "patterns": [
+        "create a contact",
+        "view contacts",
+        "who is",
+        "show me my contacts",
+        "make a new contact"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    }
+  ]
+}
