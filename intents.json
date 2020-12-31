@@ -11,10 +11,10 @@
         "Good Afternoon"
       ],
       "responses": [
-        "Hello!",
-        "Hi!",
-        "Hey!",
-        "Hi, how may i help you!"
+        "Hello ",
+        "Hi ",
+        "Hey ",
+        "Hi, how may i help you "
       ],
       "context": [
         ""
@@ -27,8 +27,7 @@
         "Goodbye",
         "Cya",
         "See you later",
-        "Good night",
-        "goodnight",
+        "talk to you later",
         "exit",
         "leave"
       ],
@@ -102,11 +101,11 @@
         "give me a fun fact"
       ],
       "responses": [
-        "The supreme court has it's own private basketball court called the 'Highest Court In The Land'!",
-        "Walmart has a lower acceptance rate than Harvard!",
-        "The technical name for the fear of long words is hippopotomonstrosesquippedaliophobia",
-        "A university in Michigan offers a unicorn hunting license!",
-        "Cows 'moo' with regional accents!"
+        "\nThe supreme court has it's own private basketball court called the 'Highest Court In The Land'!",
+        "\nWalmart has a lower acceptance rate than Harvard!",
+        "\nThe technical name for the fear of long words is hippopotomonstrosesquippedaliophobia",
+        "\nA university in Michigan offers a unicorn hunting license!",
+        "\nCows 'moo' with regional accents!"
       ],
       "context": [
         "another one",
@@ -190,6 +189,8 @@
         "what is",
         "what was",
         "who was",
+        "who is",
+        "who's",
         "what's"
       ],
       "responses": [
@@ -211,7 +212,8 @@
         "who's the",
         "where is the",
         "what's the",
-        "where's the"
+        "where's the",
+        "how tall is"
       ],
       "responses": [
         ""
@@ -272,6 +274,7 @@
         "whats it like outside",
         "hows the weather today",
         "weather today",
+        "whats the weather",
         "weather tomorrow"
       ],
       "responses": [
@@ -290,11 +293,11 @@
         "joke"
       ],
       "responses": [
-        "What type of shoes do frogs wear?\n Open Toad!",
-        "Why shouldn't you write with a broken pencil?\n Because it's pointless!",
-        "Why does a duck have tail feathers?\n To cover its butt quack!",
-        "What happens when a frog's car breaks down?\n It gets toad!",
-        "How do you make a tissue dance?\n You put a little boogie in it!"
+        "\nWhat type of shoes do frogs wear?\n Open Toad!",
+        "\nWhy shouldn't you write with a broken pencil?\n Because it's pointless!",
+        "\nWhy does a duck have tail feathers?\n To cover its butt quack!",
+        "\nWhat happens when a frog's car breaks down?\n It gets toad!",
+        "\nHow do you make a tissue dance?\n You put a little boogie in it!"
       ],
       "context": [
         "another one",
@@ -307,7 +310,9 @@
       "patterns": [
         "create a contact",
         "view contacts",
-        "who is",
+        "search for person in my contacts",
+        "search my contacts for person",
+        "person in my contacts",
         "show me my contacts",
         "make a new contact"
       ],
