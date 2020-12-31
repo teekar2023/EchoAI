@@ -1,4 +1,4 @@
-#Version 1.1.0
+# Version 1.1.0
 ***
 #Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
@@ -7,18 +7,18 @@ It Takes A Minute Or Two To Start Up Sometimes So Please Be Patient!
 
 It Also Sometimes Doesn't Respond For A Second. This Happens After It Takes Input And Is Processing That!
 ***
-#Description
+# Description
 EchoAI is a simple AI Personal Assistant that has basic functions! More functions Are Coming Soon!
 
 Please Email Me (sree23palla@outlook.com) For Help, Bug Reports, Or Suggestions!
 
 Thank You For Trying EchoAI!
 ***
-#Here's What It Looks Like:
+# Here's What It Looks Like:
 
 ![img_1.png](img_1.png)
 ***
-#TODO
+# TODO
 * Weather Module Fix
 * Bug Reporter Which Sends Terminal Output
 * Help Menu  
@@ -37,7 +37,7 @@ Thank You For Trying EchoAI!
 * Add Dice Roller
 * Switch So SocketServer
 ***
-#LICENSE
+# LICENSE
 
 Copyright © 2020 Sreekar Palla
 
