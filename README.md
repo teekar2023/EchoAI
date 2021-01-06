@@ -1,4 +1,4 @@
-#Version 1.1.0
+#Version 1.2.0
 ***
 #Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
