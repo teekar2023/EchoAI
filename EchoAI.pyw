@@ -441,6 +441,7 @@ def exit_echo():
     exit_confirmation = askyesno(title="Exit", message="Are You Sure You Want To Exit EchoAI?")
     if exit_confirmation:
         root.destroy()
+        exit()
     else:
         button_input()
 
