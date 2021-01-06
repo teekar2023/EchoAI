@@ -20,22 +20,21 @@ Thank You For Trying EchoAI!
 ***
 #TODO
 * Weather Module Fix
-* Bug Reporter Which Sends Terminal Output
-* Help Menu  
+* Add Logging
+* Ambient Noise Adjusting Setting
+* Help Menu
 * Contacts
 * Email
-* Settings Window
-* Tools Such As A Graphing Calculator
+* Option To Change Font And Theme In Settings
+* Tools Such As A Built-in Calculator
 * Built-In Games
 * Smart Home
 * Reminders
 * Timers
-* Alarms  
-* Text-To-Speech Voice
-* GUI Tweaks
+* Alarms
 * Repeat After Me Command  
 * Add Dice Roller
-* Switch So SocketServer
+* Switch To SocketServer
 ***
 #LICENSE
 

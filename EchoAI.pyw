@@ -697,6 +697,7 @@ menubar.add_cascade(label="DEVICE", menu=device_menu)
 menubar.add_cascade(label="v1.2.0", menu=version_menu)
 root.config(menu=menubar)
 root.protocol("WM_DELETE_WINDOW", exit_echo)
+ChatLog.config(foreground="#442265", font=("TrebuchetMS", 12))
 current_directory = os.getcwd()
 user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
 if user_data_file_check == "":
@@ -724,6 +725,5 @@ else:
     else:
         ChatLog.config(state=NORMAL)
     ChatLog.insert(END, "Press The Green Button Below To Make Me Listen!\n\n")
-    ChatLog.config(foreground="#442265", font=("TrebuchetMS", 12))
     button_input()
     root.mainloop()
