@@ -1,11 +1,9 @@
-# Version 1.2.0
+# Version 1.3.0
 ***
 # Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
 
 It Takes A Minute Or Two To Start Up Sometimes So Please Be Patient!
-
-It Also Sometimes Doesn't Respond For A Second. This Happens After It Takes Input And Is Processing That!
 ***
 # Description
 EchoAI is a simple AI Personal Assistant that has basic functions! More functions Are Coming Soon!
@@ -20,13 +18,8 @@ Thank You For Trying EchoAI!
 ***
 # TODO
 * Weather Module Fix
-* Add Logging
 * Ambient Noise Adjusting Setting
-* Help Menu
-* Contacts
-* Email
 * Option To Change Font And Theme In Settings
-* Tools Such As A Built-in Calculator
 * Built-In Games
 * Smart Home
 * Reminders
@@ -34,6 +27,7 @@ Thank You For Trying EchoAI!
 * Alarms
 * Repeat After Me Command  
 * Add Dice Roller
+* Custom YouTube Music Player Integration  
 * Switch To SocketServer
 ***
 # LICENSE

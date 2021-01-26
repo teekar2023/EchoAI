@@ -213,7 +213,10 @@
         "where is the",
         "what's the",
         "where's the",
-        "how tall is"
+        "how is",
+        "how many",
+        "translate",
+        "translate hello how are you"
       ],
       "responses": [
         ""
@@ -303,24 +306,6 @@
         "another one",
         "another",
         "one more"
-      ]
-    },
-    {
-      "tag": "contacts",
-      "patterns": [
-        "create a contact",
-        "view contacts",
-        "search for person in my contacts",
-        "search my contacts for person",
-        "person in my contacts",
-        "show me my contacts",
-        "make a new contact"
-      ],
-      "responses": [
-        ""
-      ],
-      "context": [
-        ""
       ]
     }
   ]
