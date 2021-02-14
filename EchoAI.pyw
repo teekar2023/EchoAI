@@ -17,16 +17,16 @@ import logging
 import os
 import pickle
 import random
-import subprocess
+import sys
 import time
 import webbrowser
 from datetime import date
-from tkinter import *
+from tkinter import DISABLED, END, NORMAL, Text, Label, Toplevel, Entry, IntVar, DoubleVar, Menu, Tk, PhotoImage, FALSE, \
+    Button, Scrollbar, Scale, HORIZONTAL, OptionMenu, StringVar
 from tkinter.filedialog import asksaveasfile
-from tkinter.messagebox import showerror, showinfo, askyesno
+from tkinter.messagebox import showerror, showinfo, askyesno, askokcancel
 from tkinter.simpledialog import askstring
 
-import holidays
 import nltk
 import numpy as np
 import pyautogui as gui
@@ -39,7 +39,7 @@ from keras.models import load_model
 from nltk import WordNetLemmatizer
 
 lemmatizer = WordNetLemmatizer()
-model = load_model('ECHOAI_model.h5')
+model = load_model('EchoAI_model.h5')
 intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
@@ -151,7 +151,7 @@ def reset_echo():
         restart_echo()
     else:
         showinfo(title="Reset", message="Reset Aborted!")
-        button_input()
+        echo_input()
 
 
 def open_website():
@@ -162,7 +162,7 @@ def open_website():
 def bug_report():
     logging.info("Bug Report Process Starting")
     showinfo(title="Bug Report",
-             message="This Might Require A Github Account! If You Do not Have One And Don't Want To Make One, You Can Email Me At sree23palla@outlook.com")
+             message="This Might Require A GitHub Account! If You Do not Have One And Don't Want To Make One, You Can Email Me At sree23palla@outlook.com")
     showinfo(title="Bug Report",
              message=f"Please Attach The Following Log File Into The Bug Report! Path To Log File: {current_directory}\\app.log")
     webbrowser.open("https://github.com/teekar2023/EchoAI/issues/new")
@@ -172,7 +172,8 @@ def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.3.0":
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.4.0":
+        logging.warning("Newer Version Available! Current Version: 1.4.0")
         update_confirmation = askyesno(title="Update",
                                        message="There Is A New Version Available! Would You Like To Download It?")
         if update_confirmation:
@@ -180,14 +181,14 @@ def update_echo():
             download_url = new_url.replace("tag", "download")
             webbrowser.open(download_url)
             logging.info("Downloading Updated Version")
-            showinfo(title="Update", message="Please Uninstall This Version And Then Install The New Version!")
+            showinfo(title="Update", message="Please Run The Newly Downloaded Installer To Update EchoAI After Closing!")
+            exit_echo()
         else:
-            showinfo(title="Update", message="Update Aborted!")
-            button_input()
+            echo_input()
     else:
         showinfo(title="Update", message="There Is No New Update Available!")
         logging.info("No New Update Available")
-        button_input()
+        echo_input()
 
 
 def save_conversation():
@@ -202,7 +203,7 @@ def contact_developer():
     logging.info("Contact Developer Popup Shown")
     showinfo(title="Contact Developer",
              message="You Can Contact The Developer At Any Time By Email:\n sree23palla@outlook.com")
-    button_input()
+    echo_input()
 
 
 def changelog():
@@ -210,22 +211,20 @@ def changelog():
     changelog_window.title("EchoAI - Changelog")
     changelog_window.geometry("500x500")
     changelog_window.resizable(width=False, height=False)
-    changelog_text = Label(changelog_window, text="New In EchoAI v1.3.0:\n"
-                                                  "Added Logging!\n"
-                                                  "Added Crash Detection!\n"
-                                                  "Added App Icon For Window!\n"
-                                                  "Added Help Window In ECHO Dropdown!\n"
-                                                  "Unit Conversion Support!\n"
-                                                  "Basic Translation Support!\n"
-                                                  "Fixed Problem Where User Could Manipulate Contents Of The ChatLog Box!\n"
-                                                  "Saying 'goodbye' now returns something instead of prompting for exit!\n"
-                                                  "Removed Uninstall Function Due To Some Problems!\n"
-                                                  "Other Minor Changes And Fixes!\n"
+    changelog_text = Label(changelog_window, text="New In EchoAI v1.4.0:\n"
+                                                  "Finally Fixed Local Weather!\n"
+                                                  "Added Auto Update Check At Startup!\n"
+                                                  "Added A Few More Tips In Help Window!\n"
+                                                  "Added Function To Press <Esc> On Main Window To Close And Exit!\n"
+                                                  "Fixed Big Issues With 'Days Until Holiday' Command!\n"
+                                                  "Removed Holiday Greeting At Startup To Reduce Size Of Application!\n"
+                                                  "Optimized Imports In Hopes To Reduce Size Of Application!\n"
+                                                  "Other Minor Fixes And Changes!\n"
                                                   "Please Report Any Bugs On The Github Page Or Email Me At "
                                                   "sree23palla@outlook.com\n "
                                                   "Thank You For Using EchoAI!")
     website_button = Button(changelog_window, command=open_website, font=("TrebuchetMS", 12, 'bold'),
-                            text="Click Here To Open Website!", width="500", height="5",
+                            text="Click Here To Open Website And See Source Code!", width="500", height="5",
                             bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
     update_button = Button(changelog_window, command=update_echo, font=("TrebuchetMS", 12, 'bold'),
                            text="Click Here To Check For Updates!", width="500", height="5",
@@ -241,11 +240,11 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.3.0\n"
+                       text="EchoAI v1.4.0\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
-                            "Python Version Used: 3.8\n"
+                            "Built Using Python Version: 3.8\n"
                             "OS: Windows 10\n"
                             "Tested On: Windows 10 x64 Based Systems\n"
                             "Feel Free To Contact Me Anytime "
@@ -253,7 +252,7 @@ def about_echo():
                             "sree23palla@outlook.com\n"
                             "Thanks For Using EchoAI!")
     website_button = Button(about_window, command=open_website, font=("TrebuchetMS", 12, 'bold'),
-                            text="Click Here To Open Website!", width="400", height="5",
+                            text="Click Here To Open Website And See Source Code!", width="400", height="5",
                             bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
     changelog_button = Button(about_window, command=changelog, font=("TrebuchetMS", 12, 'bold'),
                               text="Click Here To View The Changelog!", width="400", height="5",
@@ -339,7 +338,7 @@ def user_data():
         showerror(title="EchoAI Settings (Personal Information)",
                   message="You Have Not Filled Everything Out Properly! Settings Will Now Exit!!")
         user_data_window.destroy()
-        button_input()
+        echo_input()
     else:
         logging.warning("Deleting Old User Data")
         user_data_file.truncate()
@@ -408,9 +407,9 @@ def other_settings():
     new_volume = volume_slider.get()
     if new_weather_city == "" or new_weather_city.isspace():
         showerror(title="EchoAI Settings (Personal Information)",
-                  message="You Have Not Filled Everything Out Properly! Settings Will Now Exit!!")
+                  message="You Have Not Filled Everything Out Properly! Settings Will Now Exit!")
         other_settings_window.destroy()
-        button_input()
+        echo_input()
     else:
         logging.warning("Deleting Old Settings Data")
         setting_file.truncate()
@@ -436,12 +435,18 @@ def other_settings():
 
 
 def echo_help():
-    list_of_modules = ["What Time Is It?", "What's The Date Today?", "Ask About A Famous Person!",
-                       "What Is 0 Divided By 0?", "How Is The Weather Today?", "Tell Me A Joke!", "Tell Me A Fun Fact!",
+    list_of_modules = ["Ask What Time It Is!", "Ask What Date It Is!", "Ask About A Famous Person!",
+                       "Ask A Mathematical Question!", "Ask About The Weather Today!", "Ask For A Joke!", "Ask For A Fun Fact!",
                        "Ask A Geographical Question!"]
     list_of_tips = [
-        "Ever Wondered What Your Device Is Doing In The Background? Find Out By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!"]  # TODO Add More Tips
+        "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
+        "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
+        "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.4.0 Dropdown At The Top Of The Main Window!",
+        "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
+        "Check Out Source Code And Other Things Of EchoAI By Clicking The Website Button In The 1.4.0 Dropdown At The Top Of The Main Window!",
+        "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
+        "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!"]
     random.shuffle(list_of_modules)
     random.shuffle(list_of_tips)
     item_one = list_of_modules[0]
@@ -469,7 +474,7 @@ def restart_echo():
         logging.warning("Restarting EchoAI")
         os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
     else:
-        button_input()
+        echo_input()
 
 
 def exit_echo():
@@ -479,7 +484,17 @@ def exit_echo():
         root.destroy()
         exit()
     else:
-        button_input()
+        echo_input()
+
+
+def exit_echo_param(event):
+    exit_confirmation = askyesno(title="Exit", message="Are You Sure You Want To Exit EchoAI?")
+    if exit_confirmation:
+        logging.warning("Exiting EchoAI")
+        root.destroy()
+        exit()
+    else:
+        echo_input()
 
 
 def system_information():
@@ -494,7 +509,7 @@ def system_information():
 def task_manager():
     showinfo(title="Task Manager",
              message="In Order To Use EchoAI Again, You Might Need To Close Task Manager! This Is "
-                     "A Python Problem And I Cannot Do Anything About It!")
+                     "A Python/Windows Problem And I Cannot Do Anything About It!")
     logging.info("Starting Task Manager")
     os.system("taskmgr")
 
@@ -502,7 +517,14 @@ def task_manager():
 def terminal_command():
     terminal_input = askstring(title="Command", prompt="Enter A Command To Execute In Terminal!")
     if terminal_input is None or terminal_input == "EchoAI" or terminal_input == "echoai":
-        button_input()
+        confirmation = askokcancel(title="Command",
+                                   message="This Will Launch A New Instance Of The App! Would You Like To Continue?")
+        if confirmation:
+            logging.warning("Starting New Instance Of EchoAI")
+            os.system("start EchoAI")
+            echo_input()
+        else:
+            echo_input()
     else:
         showinfo(title="Terminal Command", message="Check The Terminal Window That Is About To Open!")
         logging.info("Starting Command Prompt")
@@ -518,7 +540,7 @@ def sign_out():
         logging.info("Signing Out Of Device")
         os.system("shutdown -l")
     else:
-        button_input()
+        echo_input()
 
 
 def shutdown_device():
@@ -527,7 +549,7 @@ def shutdown_device():
         logging.info("Shutting Down Device")
         os.system("shutdown /s /t 2")
     else:
-        button_input()
+        echo_input()
 
 
 def restart_device():
@@ -536,7 +558,7 @@ def restart_device():
         logging.info("Restarting Device")
         os.system("shutdown /r /t 2")
     else:
-        button_input()
+        echo_input()
 
 
 def clean_up_sentence(sentence):
@@ -607,50 +629,123 @@ def get_response(ints, intents_json, query):
                 return result
             if tag == "days until holiday":
                 today = date.today()
+                today_year = today.year
                 if "Christmas" in query:
-                    future = date(today.year, 12, 25)
+                    future = date(today_year, 12, 25)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 12, 25)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "New Year" in query:
-                    future = date(today.year, 1, 1)
+                    future = date(today_year, 1, 1)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 1, 1)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Memorial Day" in query:
-                    future = date(today.year, 5, 25)
+                    future = date(today_year, 5, 25)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 5, 25)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Independence Day" in query:
-                    future = date(today.year, 7, 3)
+                    future = date(today_year, 7, 3)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 7, 3)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Labor Day" in query:
-                    future = date(today.year, 9, 7)
+                    future = date(today_year, 9, 7)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 9, 7)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Veterans Day" in query:
-                    future = date(today.year, 11, 11)
+                    future = date(today_year, 11, 11)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 11, 11)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Thanksgiving" in query:
-                    future = date(today.year, 11, 26)
+                    future = date(today_year, 11, 26)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 11, 26)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Martin Luther" in query or "MLK" in query:
-                    future = date(today.year, 1, 20)
+                    future = date(today_year, 1, 20)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 1, 20)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
                 if "Easter" in query:
-                    future = date(today.year, 4, 4)
+                    future = date(today_year, 4, 4)
                     diff = future - today
-                    result = "It Is " + str(diff.days) + " Days Until Then!"
+                    diff_days = str(diff.days)
+                    if "-" in diff_days:
+                        today_year += 1
+                        future = date(today_year, 4, 4)
+                        diff = future - today
+                        diff_days = str(diff.days)
+                        result = "It Is " + diff_days + " Days Until Then!"
+                    else:
+                        result = "It Is " + diff_days + " Days Until Then!"
                     return result
             if tag == "who am i":
                 data_file = json.load(open(f"{current_directory}\\Data\\UserData.json"))
@@ -664,9 +759,28 @@ def get_response(ints, intents_json, query):
                          f"Home Address: {home_address}"
                 return result
             if tag == "weather local":
-                result = "Weather Has Been Disabled Due To Some Problems Which Will Be Fixed In The Next Few Updates!\n" \
-                         "Sorry For The Inconvenience!"
-                # TODO Fix Weather Module
+                BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+                CITY = settings_file["weather_city"]
+                API_KEY = "95955dc71e2c07a73932f9d5ff2b0887"
+                URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+                response = requests.get(URL)
+                if response.status_code == 200:
+                    data = response.json()
+                    main = data['main']
+                    temperature = main['temp']
+                    f_temp = (temperature - 273.15) * (9 / 5) + 32
+                    temp_feel_like = main['feels_like']
+                    feels_like_f = (temp_feel_like - 273.15) * (9 / 5) + 32
+                    humidity = main['humidity']
+                    pressure = main['pressure']
+                    weather_report = data['weather']
+                    wind_report = data['wind']
+                    result = '\n' + f"{CITY:-^35}" + '\n' + f"Temperature: {round(f_temp)}°F" + '\n' + f"Feels Like: {round(feels_like_f)}°F" + '\n' + f"Humidity: {humidity}%" + '\n' + f"Pressure: {pressure}hPa" + '\n' + f"Weather Type: {weather_report[0]['description']}" + '\n' + f"Wind Speed: {round(wind_report['speed'] * 2.237)}mph"
+                else:
+                    logging.warning("Error Connecting To OpenWeatherMap Weather API")
+                    result = "ERROR"
+                    showerror(title="Weather",
+                              message="There Was An Error Contacting The Weather API. Please Try Again Later!")
                 return result
             else:
                 return result
@@ -676,10 +790,11 @@ def echo_response(cmd):
     logging.info("Getting EchoAI Response")
     ints = predict_class(cmd, model)
     res = get_response(ints, intents, cmd)
+    print(root.focus_get())
     return res
 
 
-def button_input():
+def echo_input():
     voice_button = Button(root, font=("TrebuchetMS", 12, 'bold'), text="Click To Use!", width="500", height="50",
                           bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff',
                           command=command)
@@ -707,15 +822,19 @@ def command():
     except sr.UnknownValueError:
         logging.error("UnknownValueError Thrown In Function command()")
         showerror(title="EchoAI", message="I Could Not Properly Hear What You Said! Please Try Again!")
-        button_input()
-    except sr.RequestError:
+        echo_input()
+    except sr.RequestError as e:
         logging.error("RequestError Thrown In Function command()")
-        showerror(title="EchoAI", message="There Was A Problem With Your Request! Please try Again Later!")
-        button_input()
+        showerror(title="EchoAI", message=f"There Was A Problem With Your Request! Please Try Again Later! Error: {e}")
+        echo_input()
     except sr.WaitTimeoutError:
         logging.error("WaitTimeoutError Thrown In Function command()")
         ChatLog.insert(END, "You Took Too Long To Speak! Press The Green Button Below To Use Again!")
-        button_input()
+        echo_input()
+    except Exception as e:
+        logging.error("Exception In Function command()")
+        showerror(title="EchoAI", message=f"Something Went Wrong! Please Try Again! Error: {e}")
+        echo_input()
 
 
 root = Tk()
@@ -729,16 +848,19 @@ log_file = open("app.log", "r+")
 log_bytes = open("app.log", "rb")
 logging.basicConfig(filename='app.log', filemode='r+', level="DEBUG",
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-with log_bytes as f:
-    f.seek(-2, os.SEEK_END)
-    while f.read(1) != b'\n':
-        f.seek(-2, os.SEEK_CUR)
-    last_line = f.readline().decode()
-if " - comtypes - DEBUG - CoUnititialize() done." not in last_line and "- root - WARNING - Restarting EchoAI" not in last_line and last_line != "use":
-    report_bug = askyesno(title="Crash Detected",
-                          message="It Appears That EchoAI Has Crashed Last Time It Was Used. Would You Like To Send A Bug Report?")
-    if report_bug:
-        bug_report()
+try:
+    with log_bytes as f:
+        f.seek(-2, os.SEEK_END)
+        while f.read(1) != b'\n':
+            f.seek(-2, os.SEEK_CUR)
+        last_line = f.readline().decode()
+    if " - comtypes - DEBUG - CoUnititialize() done." not in last_line and "- root - WARNING - Restarting EchoAI" not in last_line and last_line != "use" and last_line != "" and not last_line.isspace():
+        report_bug = askyesno(title="Crash Detected",
+                            message="It Appears That EchoAI Has Crashed Last Time It Was Used. Would You Like To Send A Bug Report?")
+        if report_bug:
+            bug_report()
+except OSError:
+    pass
 log_file.truncate()
 logging.info("Loading Application And GUI")
 ChatLog = Text(root, bd=0, bg="white", height="8", width="50", font="TrebuchetMS")
@@ -769,14 +891,33 @@ device_menu.add_command(label="Terminal Command", command=terminal_command)
 device_menu.add_command(label="Sign Out", command=sign_out)
 device_menu.add_command(label="Shutdown Device", command=shutdown_device)
 device_menu.add_command(label="Restart Device", command=restart_device)
-menubar.add_cascade(label="ECHO", menu=echo_menu)
-menubar.add_cascade(label="DEVICE", menu=device_menu)
-menubar.add_cascade(label="v1.3.0", menu=version_menu)
+menubar.add_cascade(label="Echo", menu=echo_menu)
+menubar.add_cascade(label="Device", menu=device_menu)
+menubar.add_cascade(label="1.4.0", menu=version_menu)
 root.config(menu=menubar)
+root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo)
-ChatLog.config(foreground="#442265", font=("TrebuchetMS", 12))
+ChatLog.config(font=("TrebuchetMS", 12))
 logging.info("Finished Building And Configuring GUI")
 user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
+logging.info("Checking For Update")
+url = "http://github.com/teekar2023/EchoAI/releases/latest/"
+r = requests.get(url, allow_redirects=True)
+redirected_url = r.url
+if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.4.0":
+    logging.warning("Newer Version Available! Current Version: 1.4.0")
+    update_confirmation = askyesno(title="Update",
+                                   message="There Is A New Version Available! Would You Like To Download It?")
+    if update_confirmation:
+        new_url = str(redirected_url) + "/EchoAI.Setup.exe"
+        download_url = new_url.replace("tag", "download")
+        webbrowser.open(download_url)
+        logging.info("Downloading Updated Version")
+        showinfo(title="Update", message="Please Run The Newly Downloaded Installer To Update EchoAI After Closing!")
+        exit_echo()
+else:
+    showinfo(title="Update", message="There Is No New Update Available!")
+    logging.info("No New Update Available")
 logging.info("Checking Data To See If Set Up")
 if user_data_file_check == "" or user_data_file_check.isspace():
     logging.info("User Data Not Found. Setup Incomplete")
@@ -798,17 +939,9 @@ else:
     logging.info("Finished Configuring TTS Voice")
     name_file = json.load(open(f"{current_directory}\\Data\\UserData.json"))
     name = name_file['name']
-    holidays = holidays.US()
-    today = date.today()
-    date_formatted = today.strftime("%m-%d-%y")
-    check_holiday = date_formatted in holidays
-    if check_holiday:
-        ChatLog.config(state=NORMAL)
-        ChatLog.insert(END, f"Have A Good {holidays.get(date_formatted)}!\n\n")
-    else:
-        ChatLog.config(state=NORMAL)
+    ChatLog.config(state=NORMAL)
     ChatLog.insert(END, "Press The Green Button Below To Make Me Listen!\n\n")
-    logging.info("Done With Startup. Moving Onto button_input() Function")
+    logging.info("Done With Startup. Moving Onto echo_input() Function")
     ChatLog.config(state=DISABLED)
-    button_input()
+    echo_input()
     root.mainloop()

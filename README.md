@@ -1,4 +1,4 @@
-# Version 1.3.0
+# Version 1.4.0
 ***
 # Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
@@ -17,16 +17,19 @@ Thank You For Trying EchoAI!
 ![img_1.png](img_1.png)
 ***
 # TODO
-* Weather Module Fix
+* Add Setting For Fahrenheit And Celcius Weather
+* Add Global Weather
+* Improved Update Downloader
 * Ambient Noise Adjusting Setting
-* Option To Change Font And Theme In Settings
+* Option To Change Font And Theme And Button Colors In Settings
 * Built-In Games
 * Smart Home
 * Reminders
 * Timers
 * Alarms
-* Repeat After Me Command  
-* Add Dice Roller
+* Repeat After Me Command
+* Add Whisper Mode
+* Add Mini Mode
 * Custom YouTube Music Player Integration  
 * Switch To SocketServer
 ***
