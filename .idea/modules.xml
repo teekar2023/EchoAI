@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/EchoAI.iml" filepath="$PROJECT_DIR$/.idea/EchoAI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../babel/.idea/babel.iml" filepath="$PROJECT_DIR$/../babel/.idea/babel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../systemMonitoringApp/.idea/systemMonitoringApp.iml" filepath="$PROJECT_DIR$/../systemMonitoringApp/.idea/systemMonitoringApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../youtubeMusicPlayer/.idea/youtubeMusicPlayer.iml" filepath="$PROJECT_DIR$/../youtubeMusicPlayer/.idea/youtubeMusicPlayer.iml" />
     </modules>
   </component>
 </project>

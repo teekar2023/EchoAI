@@ -1,4 +1,4 @@
-# Version 1.4.0
+# Version 1.5.0
 ***
 # Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
@@ -13,17 +13,15 @@ Please Email Me (sree23palla@outlook.com) For Help, Bug Reports, Or Suggestions!
 Thank You For Trying EchoAI!
 ***
 # TODO
-* Add Setting For Fahrenheit And Celcius Weather
 * Add Global Weather
 * Ambient Noise Adjusting Setting
-* Option To Change Font And Theme And Button Colors In Settings
+* Option To Change Font And Theme And Accent Colors In Settings
 * Built-In Games
 * Smart Home
 * Reminders
-* Timers
+* Voice Commands For Timers
 * Alarms
 * Repeat After Me Command
-* Add Whisper Mode
 * Add Mini Mode
 * Custom YouTube Music Player Integration  
 * Switch To SocketServer
