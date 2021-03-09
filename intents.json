@@ -307,6 +307,26 @@
         "another",
         "one more"
       ]
+    },
+    {
+      "tag": "timer",
+      "patterns": [
+        "set a timer for",
+        "set a timer",
+        "start timer for",
+        "start timer",
+        "start a timer for",
+        "start a timer",
+        "x hour timer",
+        "x minute timer",
+        "x hour x minute timer"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
     }
   ]
 }

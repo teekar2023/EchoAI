@@ -1,4 +1,4 @@
-#  Copyright © 2020 <Sreekar Palla>
+#  Copyright © 2021 <Sreekar Palla>
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 #  documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -12,22 +12,21 @@
 #  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 #  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import ctypes
 import json
 import logging
-import os
 import pickle
 import random
-import sys
+import subprocess
+import threading
 import time
+import urllib
 import webbrowser
 from datetime import date
-from tkinter import *
 from tkinter.filedialog import *
 from tkinter.messagebox import *
 from tkinter.simpledialog import *
-import urllib
-import ctypes
-import subprocess
+from multiprocessing import Process
 
 import nltk
 import numpy as np
@@ -188,20 +187,21 @@ def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.5.0":
-        logging.warning("Newer Version Available! Current Version: 1.5.0")
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.5.1":
+        logging.warning("Newer Version Available! Current Version: 1.5.1")
         new_url = str(redirected_url) + "/EchoAI.Setup.exe"
         download_url = new_url.replace("tag", "download")
         update_window = Toplevel(root)
         update_window.title("Update EchoAI")
         update_window.geometry("500x500")
         update_window.resizable(width=False, height=False)
-        update_text = Label(update_window, text="There Is A New Update Available! Click The Button Below If You Wish To Download It!")
+        update_text = Label(update_window,
+                            text="There Is A New Update Available! Click The Button Below If You Wish To Download It!")
         update_text.pack()
         int_var = IntVar(update_window)
         update_button = Button(update_window, command=lambda: int_var.set(1), font=("TrebuchetMS", 12, 'bold'),
-                           text="Download Update", width="500", height="10",
-                           bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
+                               text="Download Update", width="500", height="10",
+                               bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
         update_button.pack()
         changelog_text = Label(update_window, text="Changelog Will Soon Show Up Here!")
         changelog_text.pack()
@@ -209,7 +209,7 @@ def update_echo():
         if is_admin():
             f = asksaveasfile(mode='wb', defaultextension=".exe")
             if f is None:
-                pass
+                return
             else:
                 ChatLog.insert(END, "DOWNLOADING UPDATE INSTALLER...\n")
                 ChatLog.insert(END, "PLEASE DO NOT CLOSE ECHOAI AT THIS TIME...\n")
@@ -217,13 +217,16 @@ def update_echo():
                 ChatLog.insert(END, "PLEASE BE PATIENT...\n")
                 ChatLog.insert(END, "ECHOAI WILL BE UNUSABLE AT THIS TIME...\n")
                 ChatLog.insert(END, "PLEASE SUBMIT A BUG REPORT IF ANYTHNG GOES WRONG...")
-                showwarning(title="Update", message="EchoAI Will Alert You Once The Update Is Downloaded And Will Not Respond During The Download! Please Do Not Interrupt The Download Process!")
+                showwarning(title="Update",
+                            message="EchoAI Will Alert You Once The Update Is Downloaded And Will Not Respond During The Download! Please Do Not Interrupt The Download Process!")
                 logging.info("Downloading Update Installer")
                 f2 = urllib.request.urlopen(download_url)
                 while True:
                     data = f2.read()
                     if not data:
                         break
+                    else:
+                        pass
                     f.write(data)
                 f.write(data)
                 logging.info("Finished Downloading Update Installer")
@@ -234,11 +237,12 @@ def update_echo():
                     installed_file2 = installed_file1.replace("'>", "")
                     f.close()
                     subprocess.call(installed_file2)
-                    pass
+                    return
                 else:
-                    pass
+                    return
         else:
-            showwarning(title="Update", message="Esclated Privilages Are Required To Download Files! EchoAI Will Now Restart! Please Allow Admin Privilages!")
+            showwarning(title="Update",
+                        message="Esclated Privilages Are Required To Download Files! EchoAI Will Now Restart! Please Allow Escalated Privilages!")
             root.destroy()
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
             exit()
@@ -246,7 +250,6 @@ def update_echo():
         showinfo(title="Update", message="There Is No New Update Available!")
         logging.info("No New Update Available")
         echo_input()
-
 
 
 def save_conversation():
@@ -269,18 +272,15 @@ def changelog():
     changelog_window.title("EchoAI - Changelog")
     changelog_window.geometry("500x500")
     changelog_window.resizable(width=False, height=False)
-    changelog_text = Label(changelog_window, text="New In EchoAI v1.5.0:\n"
-                                                  "Added Brand New Update Download Window!\n"
-                                                  "Added Functionality To Download Update Directly From App!\n"
-                                                  "Added New Setting For Measurement Units!\n"
-                                                  "Added New Tools Cascade!\n"
-                                                  "Added New Timer Window In Tools Cascade!\n"
-                                                  "Some Weather Changes And Fixes!\n"
-                                                  "Combined Settings Windows!\n"
-                                                  "Removed Annoying Update Popup At Startup!\n"
-                                                  "Removed Exit Confirmation On Close Window Button!\n"
-                                                  "Other Minor Changes!\n"
-                                                  "Reached 1000+ Lines Of Code!\n"
+    changelog_text = Label(changelog_window, text="New In EchoAI v1.5.1:\n"
+                                                  "Fixed Issue Where EchoAI Would Run In Background If Setup Is Interrupted!\n"
+                                                  "Decreased Wait Timeout For Command Input!\n"
+                                                  "Updated Dependencies!\n"
+                                                  "Minor Visual Tweaks!\n"
+                                                  "Disabled Startup Update Check!\n"
+                                                  "Started Development On Voice Commands For Timers!\n"
+                                                  "Some Other Fixes!\n"
+                                                  "Some Other Minor Changes!\n"
                                                   "Please Report Any Bugs On The Github Page Or Email Me At "
                                                   "sree23palla@outlook.com\n "
                                                   "Thank You For Using EchoAI!")
@@ -301,7 +301,7 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.5.0\n"
+                       text="EchoAI v1.5.1\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
@@ -336,7 +336,7 @@ def echo_settings():
     email_address = user_data_file_json["email_address"]
     home_address = user_data_file_json["home_address"]
     settings_text = Label(settings_window,
-                                      text="Change Whatever You Would Like To And Then Click The Save Button!")
+                          text="Change Whatever You Would Like To And Then Click The Save Button!")
     settings_text.pack()
     name_input_text = Label(settings_window, text="NAME")
     name_input_text.pack()
@@ -401,10 +401,10 @@ def echo_settings():
     volume_slider.pack()
     var = IntVar()
     submit_button = Button(settings_window,
-                                         command=lambda: var.set(1),
-                                         font=("TrebuchetMS", 10, 'bold'),
-                                         text="Click Here To Save And Continue!", width="400", height="5",
-                                         bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
+                           command=lambda: var.set(1),
+                           font=("TrebuchetMS", 10, 'bold'),
+                           text="Click Here To Save And Continue!", width="400", height="5",
+                           bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
     submit_button.pack()
     submit_button.wait_variable(var)
     new_name = name_input.get()
@@ -471,15 +471,16 @@ def echo_settings():
 def echo_help():
     logging.info("Displaying Help Window")
     list_of_modules = ["Ask What Time It Is!", "Ask What Date It Is!", "Ask About A Famous Person!",
-                       "Ask A Mathematical Question!", "Ask About The Weather Today!", "Ask For A Joke!", "Ask For A Fun Fact!",
+                       "Ask A Mathematical Question!", "Ask About The Weather Today!", "Ask For A Joke!",
+                       "Ask For A Fun Fact!",
                        "Ask A Geographical Question!"]
     list_of_tips = [
         "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "Check For The Latest Update By Clicking The Update Button In the 1.5.0 Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.5.1 Dropdown At The Top Of The Main Window!",
         "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
-        "Check Out Source Code And Other Things Of EchoAI By Clicking The Website Button In The 1.5.0 Dropdown At The Top Of The Main Window!",
+        "Check Out Source Code And Other Things Of EchoAI By Clicking The Website Button In The 1.5.1 Dropdown At The Top Of The Main Window!",
         "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
         "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!"]
     random.shuffle(list_of_modules)
@@ -603,44 +604,44 @@ def restart_device():
         echo_input()
 
 
-def echo_timer(): 
+def echo_timer():
     timer_window = Toplevel(root)
     timer_window.geometry("300x300")
     timer_window.title("EchoAI - Timer")
-    hour=StringVar()
-    minute=StringVar()
-    second=StringVar()
+    hour = StringVar()
+    minute = StringVar()
+    second = StringVar()
     hour.set("00")
     minute.set("00")
     second.set("00")
     hours_label = Label(timer_window, text="HOURS")
     hours_label.pack()
-    hourEntry= Entry(timer_window, width=3, font=("Arial",18,""),
-                    textvariable=hour)
+    hourEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                      textvariable=hour)
     hourEntry.pack()
     minutes_label = Label(timer_window, text="MINUTES")
     minutes_label.pack()
-    minuteEntry= Entry(timer_window, width=3, font=("Arial",18,""),
-                    textvariable=minute)
+    minuteEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                        textvariable=minute)
     minuteEntry.pack()
     seconds_label = Label(timer_window, text="SECONDS")
     seconds_label.pack()
-    secondEntry= Entry(timer_window, width=3, font=("Arial",18,""),
-                    textvariable=second)
+    secondEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                        textvariable=second)
     secondEntry.pack()
     var = IntVar()
     submit_button = Button(timer_window,
-                                         command=lambda: var.set(1),
-                                         font=("TrebuchetMS", 10, 'bold'),
-                                         text="Start The Timer", width="400", height="5",
-                                         bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
+                           command=lambda: var.set(1),
+                           font=("TrebuchetMS", 10, 'bold'),
+                           text="Start The Timer", width="400", height="5",
+                           bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
     submit_button.pack()
     submit_button.wait_variable(var)
-    temp = int(hour.get())*3600 + int(minute.get())*60 + int(second.get())
-    while temp >-1:
-        mins,secs = divmod(temp,60) 
-        hours=0
-        if mins >60:
+    temp = int(hour.get()) * 3600 + int(minute.get()) * 60 + int(second.get())
+    while temp > -1:
+        mins, secs = divmod(temp, 60)
+        hours = 0
+        if mins > 60:
             hours, mins = divmod(mins, 60)
         hour.set("{0:2d}".format(hours))
         minute.set("{0:2d}".format(mins))
@@ -648,6 +649,48 @@ def echo_timer():
         root.update()
         time.sleep(1)
         if (temp == 0):
+            timer_window.destroy()
+            messagebox.showinfo("EchoAI - Timer", "Timer Ended!")
+        temp -= 1
+
+
+def voice_timer(hours, minutes):
+    timer_window = Toplevel(root)
+    timer_window.geometry("300x300")
+    timer_window.title("EchoAI - Timer")
+    hour = StringVar()
+    minute = StringVar()
+    second = StringVar()
+    hour.set(hours)
+    minute.set(minutes)
+    second.set("00")
+    hours_label = Label(timer_window, text="HOURS")
+    hours_label.pack()
+    hourEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                      textvariable=hour)
+    hourEntry.pack()
+    minutes_label = Label(timer_window, text="MINUTES")
+    minutes_label.pack()
+    minuteEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                        textvariable=minute)
+    minuteEntry.pack()
+    seconds_label = Label(timer_window, text="SECONDS")
+    seconds_label.pack()
+    secondEntry = Entry(timer_window, width=3, font=("Arial", 18, ""),
+                        textvariable=second)
+    secondEntry.pack()
+    temp = int(hour.get()) * 3600 + int(minute.get()) * 60 + int(second.get())
+    while temp > -1:
+        mins, secs = divmod(temp, 60)
+        hours = 0
+        if mins > 60:
+            hours, mins = divmod(mins, 60)
+        hour.set("{0:2d}".format(hours))
+        minute.set("{0:2d}".format(mins))
+        second.set("{0:2d}".format(secs))
+        root.update()
+        time.sleep(1)
+        if temp == 0:
             timer_window.destroy()
             messagebox.showinfo("EchoAI - Timer", "Timer Ended!")
         temp -= 1
@@ -871,19 +914,21 @@ def get_response(ints, intents_json, query):
                     weather_report = data['weather']
                     wind_report = data['wind']
                     if units == "Imperial":
-                        ChatLog.insert(END, f"Here Is The Current Weather In {CITY}" + '\n' + f"Temperature: {round(f_temp)}°F" + '\n' + f"Feels Like: {round(feels_like_f)}°F" + '\n' + f"Humidity: {round(humidity)}%" + '\n' + f"Pressure: {pressure}hPa" + '\n' + f"Weather Type: {weather_report[0]['description']}" + '\n' + f"Wind Speed: {round(wind_report['speed'] * 2.237)}mph" + '\n')
+                        ChatLog.insert(END,
+                                       f"Here Is The Current Weather In {CITY}" + '\n' + f"Temperature: {round(f_temp)}°F" + '\n' + f"Feels Like: {round(feels_like_f)}°F" + '\n' + f"Humidity: {round(humidity)}%" + '\n' + f"Pressure: {pressure}hPa" + '\n' + f"Weather Type: {weather_report[0]['description']}" + '\n' + f"Wind Speed: {round(wind_report['speed'] * 2.237)}mph" + '\n')
                         result = f"It Is {round(f_temp)} Degrees Fahrenheit In {CITY} Right Now!"
                         return result
                     else:
-                        ChatLog.insert(END, f"Here Is The Current Weather In {CITY}" + '\n' + f"Temperature: {round(c_temp)}°C" + '\n' + f"Feels Like: {round(feels_like_c)}°C" + '\n' + f"Humidity: {round(humidity)}%" + '\n' + f"Pressure: {pressure}hPa" + '\n' + f"Weather Type: {weather_report[0]['description']}" + '\n' + f"Wind Speed: {round((wind_report['speed'] * 2.237) * 1.609)}kmh")
+                        ChatLog.insert(END,
+                                       f"Here Is The Current Weather In {CITY}" + '\n' + f"Temperature: {round(c_temp)}°C" + '\n' + f"Feels Like: {round(feels_like_c)}°C" + '\n' + f"Humidity: {round(humidity)}%" + '\n' + f"Pressure: {pressure}hPa" + '\n' + f"Weather Type: {weather_report[0]['description']}" + '\n' + f"Wind Speed: {round((wind_report['speed'] * 2.237) * 1.609)}kph")
                         result = f"It Is {round(c_temp)} Degrees Celsius In {CITY} Right Now!"
                         return result
                 else:
                     logging.warning("Error Connecting To OpenWeatherMap Weather API")
                     result = "ERROR"
                     showerror(title="Weather",
-                              message="There Was An Error Contacting The Weather API. Please Try Again Later!")
-                return result
+                              message=f"There Was An Error Contacting The Weather API And Retrieving Weather For '{CITY}'! Please Try Again Later And Make Sure Your City Is Correct In Settings!")
+                    return result
             else:
                 return result
 
@@ -904,18 +949,17 @@ def echo_input():
 
 def command():
     logging.info("Button Click Detected. Now Executing Function command()")
-    r = sr.Recognizer()
+    rec = sr.Recognizer()
     mic = sr.Microphone()
     try:
         with mic as source:
             logging.info("Listening For Command")
-            audio = r.listen(source, timeout=30, phrase_time_limit=3)
-            cmd: str = r.recognize_google(audio)
+            cmd = input()
             logging.info(f"User Said: {cmd}")
             ChatLog.config(state=NORMAL)
             ChatLog.insert(END, f"{name}: " + cmd + '\n\n')
             response = echo_response(cmd)
-            if "Fahrenheit" in response or "Celsius" in response or "Phone" in response:
+            if "Fahrenheit" in response or "Celsius" in response or name in response:
                 ChatLog.insert(END, f"{response}" + '\n\n')
             else:
                 ChatLog.insert(END, "ECHO: " + response + '\n\n')
@@ -924,19 +968,19 @@ def command():
             engine.runAndWait()
             ChatLog.config(state=DISABLED)
     except sr.UnknownValueError:
-        logging.error("UnknownValueError Thrown In Function command()")
+        logging.error("UnknownValueError Raised In Function command()")
         showerror(title="EchoAI", message="I Could Not Properly Hear What You Said! Please Try Again!")
         echo_input()
     except sr.RequestError as e:
-        logging.error(f"RequestError Thrown In Function command() Error: {e}")
+        logging.error(f"RequestError Raised In Function command() Error: {e}")
         showerror(title="EchoAI", message=f"There Was A Problem With Your Request! Please Try Again Later! Error: {e}")
         echo_input()
     except sr.WaitTimeoutError:
-        logging.error("WaitTimeoutError Thrown In Function command()")
+        logging.error("WaitTimeoutError Raised In Function command()")
         ChatLog.insert(END, "You Took Too Long To Speak! Press The Green Button Below To Use Again!")
         echo_input()
     except Exception as e:
-        logging.error(f"Exception In Function command() Error: {e}")
+        logging.error(f"Exception Raised In Function command() Error: {e}")
         showerror(title="EchoAI", message=f"Something Went Wrong! Please Try Again Or Submit A Bug Report! Error: {e}")
         echo_input()
 
@@ -960,7 +1004,7 @@ try:
         last_line = f.readline().decode()
     if " - comtypes - DEBUG - CoUnititialize() done." not in last_line and "- root - WARNING - Restarting EchoAI" not in last_line and last_line != "use" and last_line != "" and not last_line.isspace():
         report_bug = askyesno(title="Crash Detected",
-                            message="It Appears That EchoAI Ran Into A Problem Last Time It Was Used. Would You Like To Submit A Bug Report?")
+                              message="It Appears That EchoAI Ran Into A Problem Last Time It Was Used. Would You Like To Submit A Bug Report?")
         if report_bug:
             bug_report()
 except OSError:
@@ -999,26 +1043,12 @@ tools_menu.add_command(label="Timer", command=echo_timer)
 menubar.add_cascade(label="Echo", menu=echo_menu)
 menubar.add_cascade(label="Device", menu=device_menu)
 menubar.add_cascade(label="Tools", menu=tools_menu)
-menubar.add_cascade(label="1.5.0", menu=version_menu)
+menubar.add_cascade(label="1.5.1", menu=version_menu)
 root.config(menu=menubar)
 root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo_no_confirm)
 ChatLog.config(font=("TrebuchetMS", 12))
 logging.info("Finished Building And Configuring GUI")
-logging.info("Checking For Update")
-url = "http://github.com/teekar2023/EchoAI/releases/latest/"
-r = requests.get(url, allow_redirects=True)
-redirected_url = r.url
-if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.5.0":
-    logging.warning("Newer Version Available! Current Version: 1.5.0")
-    download_confirmation = askyesno(title="Update", message="There Is A Newer Version Of EchoAI Available! Would You Like To Download It?")
-    if download_confirmation:
-        update_echo()
-        pass
-    else:
-        pass
-else:
-    logging.info("No New Update Available")
 logging.info("Checking Data To See If Set Up")
 user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
 if user_data_file_check == "" or user_data_file_check.isspace():
@@ -1026,24 +1056,26 @@ if user_data_file_check == "" or user_data_file_check.isspace():
     showinfo(title="Setup", message="You Have Not Set Up EchoAI Yet! The Following Process Will Help With Setup!")
     logging.info("Setup Prompt Shown")
     setup()
+    exit_echo_no_confirm()
 else:
-    logging.info("User Data Found. EchoAI Is Already Set Up")
-    logging.info("Starting And Configuring TTS Voice")
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty('voices')
-    rate = engine.getProperty('rate')
-    settings_file = json.load(open(f"{current_directory}\\Data\\settings.json", "r+"))
-    gender = settings_file['voice_gender']
-    volume = settings_file["volume"]
-    engine.setProperty('voice', voices[int(gender)].id)
-    engine.setProperty('volume', float(volume))
-    engine.setProperty('rate', 150)
-    logging.info("Finished Configuring TTS Voice")
-    name_file = json.load(open(f"{current_directory}\\Data\\UserData.json"))
-    name = name_file['name']
-    ChatLog.config(state=NORMAL)
-    ChatLog.insert(END, "Press The Green Button Below To Make Me Listen!\n\n")
-    logging.info("Done With Startup. Moving Onto echo_input() Function")
-    ChatLog.config(state=DISABLED)
-    echo_input()
-    root.mainloop()
+    pass
+logging.info("User Data Found. EchoAI Is Already Set Up")
+logging.info("Starting And Configuring TTS Voice")
+engine = pyttsx3.init("sapi5")
+voices = engine.getProperty('voices')
+rate = engine.getProperty('rate')
+settings_file = json.load(open(f"{current_directory}\\Data\\settings.json", "r+"))
+gender = settings_file['voice_gender']
+volume = settings_file["volume"]
+engine.setProperty('voice', voices[int(gender)].id)
+engine.setProperty('volume', float(volume))
+engine.setProperty('rate', 150)
+logging.info("Finished Configuring TTS Voice")
+name_file = json.load(open(f"{current_directory}\\Data\\UserData.json"))
+name = name_file['name']
+ChatLog.config(state=NORMAL)
+ChatLog.insert(END, "Press The Green Button Below To Make Me Listen!\n\n")
+logging.info("Done With Startup. Moving Onto echo_input() Function")
+ChatLog.config(state=DISABLED)
+echo_input()
+root.mainloop()

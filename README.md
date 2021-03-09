@@ -1,4 +1,4 @@
-# Version 1.5.0
+# Version 1.5.1
 ***
 # Please Note
 EchoAI Is New And Has Lots Of Bugs And Problems!
@@ -32,7 +32,7 @@ Thank You For Trying EchoAI!
 ***
 # LICENSE
 
-Copyright © 2020 Sreekar Palla
+Copyright © 2021 Sreekar Palla
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the “Software”), to deal in the Software without restriction, including without limitation the

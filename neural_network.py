@@ -1,4 +1,4 @@
-#  Copyright © 2020 <Sreekar Palla>
+#  Copyright © 2021 <Sreekar Palla>
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 #  documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -69,5 +69,5 @@ model.add(Dropout(0.5))
 model.add(Dense(len(train_y[0]), activation='softmax'))
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-hist = model.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=5, verbose=1)
+hist = model.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=5, verbose=2)
 model.save('EchoAI_model.h5', hist)

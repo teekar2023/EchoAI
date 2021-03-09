@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['EchoAI.pyw'],
-             pathex=['C:\\Users\\admin\\PycharmProjects\\EchoAI'],
+             pathex=['C:\\Users\\sree2\\PycharmProjects\\EchoAI'],
              binaries=[],
              datas=[],
              hiddenimports=['pyttsx3.drivers.sapi5'],
