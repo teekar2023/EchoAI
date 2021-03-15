@@ -263,7 +263,6 @@ def save_conversation():
 
 
 def contact_developer():
-    logging.info("Contact Developer Popup Shown")
     showinfo(title="Contact Developer",
              message="You Can Contact The Developer At Any Time By Email:\n sree23palla@outlook.com")
     echo_input()
