@@ -18,7 +18,6 @@ import logging
 import pickle
 import random
 import subprocess
-import threading
 import time
 import urllib
 import webbrowser
@@ -26,7 +25,6 @@ from datetime import date
 from tkinter.filedialog import *
 from tkinter.messagebox import *
 from tkinter.simpledialog import *
-from multiprocessing import Process
 
 import nltk
 import numpy as np
@@ -187,8 +185,8 @@ def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.5.1":
-        logging.warning("Newer Version Available! Current Version: 1.5.1")
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.5.2":
+        logging.warning("Newer Version Available! Current Version: 1.5.2")
         new_url = str(redirected_url) + "/EchoAI.Setup.exe"
         download_url = new_url.replace("tag", "download")
         update_window = Toplevel(root)
@@ -216,7 +214,7 @@ def update_echo():
                 ChatLog.insert(END, "ECHOAI WILL ALERT YOU ONCE DOWNLOADED...\n")
                 ChatLog.insert(END, "PLEASE BE PATIENT...\n")
                 ChatLog.insert(END, "ECHOAI WILL BE UNUSABLE AT THIS TIME...\n")
-                ChatLog.insert(END, "PLEASE SUBMIT A BUG REPORT IF ANYTHNG GOES WRONG...")
+                ChatLog.insert(END, "PLEASE SUBMIT A BUG REPORT IF ANYTHING GOES WRONG...")
                 showwarning(title="Update",
                             message="EchoAI Will Alert You Once The Update Is Downloaded And Will Not Respond During The Download! Please Do Not Interrupt The Download Process!")
                 logging.info("Downloading Update Installer")
@@ -241,11 +239,15 @@ def update_echo():
                 else:
                     return
         else:
-            showwarning(title="Update",
-                        message="Esclated Privilages Are Required To Download Files! EchoAI Will Now Restart! Please Allow Escalated Privilages!")
-            root.destroy()
-            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
-            exit()
+            ask_admin = askyesno(title="Update", message="Escalated Privileges Are Required To Download Files! Click "
+                                                         "'YES' To Restart As Admin Or 'NO' To Download From Web "
+                                                         "Browser!")
+            if ask_admin:
+                ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+                exit_echo_no_confirm()
+            else:
+                webbrowser.open(download_url)
+                exit_echo()
     else:
         showinfo(title="Update", message="There Is No New Update Available!")
         logging.info("No New Update Available")
@@ -272,26 +274,20 @@ def changelog():
     changelog_window.title("EchoAI - Changelog")
     changelog_window.geometry("500x500")
     changelog_window.resizable(width=False, height=False)
-    changelog_text = Label(changelog_window, text="New In EchoAI v1.5.1:\n"
-                                                  "Fixed Issue Where EchoAI Would Run In Background If Setup Is Interrupted!\n"
-                                                  "Decreased Wait Timeout For Command Input!\n"
-                                                  "Updated Dependencies!\n"
-                                                  "Minor Visual Tweaks!\n"
-                                                  "Disabled Startup Update Check!\n"
-                                                  "Started Development On Voice Commands For Timers!\n"
-                                                  "Some Other Fixes!\n"
-                                                  "Some Other Minor Changes!\n"
+    changelog_text = Label(changelog_window, text="New In EchoAI v1.5.2:\n"
+                                                  "Added Option To Download Update From Web Browser Instead Of Directly "
+                                                  "From The App!\n"
+                                                  "Made Update Button Larger In Changelog Window!\n"
+                                                  "Removed Website Button From Changelog Window!\n"
+                                                  "A Few Other Minor Changes And Fixes!\n"
                                                   "Please Report Any Bugs On The Github Page Or Email Me At "
                                                   "sree23palla@outlook.com\n "
-                                                  "Thank You For Using EchoAI!")
-    website_button = Button(changelog_window, command=open_website, font=("TrebuchetMS", 12, 'bold'),
-                            text="Click Here To Open Website And See Source Code!", width="500", height="5",
-                            bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
+                                                  "Thanks For Using EchoAI!\n"
+                                                  "Click The Button Below To Check For Update!")
     update_button = Button(changelog_window, command=update_echo, font=("TrebuchetMS", 12, 'bold'),
-                           text="Click Here To Check For Updates!", width="500", height="5",
+                           text="Click Here To Check For Updates!", width="500", height="50",
                            bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
     changelog_text.pack(pady=10)
-    website_button.pack()
     update_button.pack()
 
 
@@ -301,7 +297,7 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.5.1\n"
+                       text="EchoAI v1.5.2\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
@@ -478,9 +474,9 @@ def echo_help():
         "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "Check For The Latest Update By Clicking The Update Button In the 1.5.1 Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.5.2 Dropdown At The Top Of The Main Window!",
         "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
-        "Check Out Source Code And Other Things Of EchoAI By Clicking The Website Button In The 1.5.1 Dropdown At The Top Of The Main Window!",
+        "Check Out Source Code And Other Things Of EchoAI By Clicking The Website Button In The 1.5.2 Dropdown At The Top Of The Main Window!",
         "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
         "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!"]
     random.shuffle(list_of_modules)
@@ -954,7 +950,8 @@ def command():
     try:
         with mic as source:
             logging.info("Listening For Command")
-            cmd = input()
+            audio = rec.listen(source, timeout=30, phrase_time_limit=3)
+            cmd: str = rec.recognize_google(audio)
             logging.info(f"User Said: {cmd}")
             ChatLog.config(state=NORMAL)
             ChatLog.insert(END, f"{name}: " + cmd + '\n\n')
@@ -1043,7 +1040,7 @@ tools_menu.add_command(label="Timer", command=echo_timer)
 menubar.add_cascade(label="Echo", menu=echo_menu)
 menubar.add_cascade(label="Device", menu=device_menu)
 menubar.add_cascade(label="Tools", menu=tools_menu)
-menubar.add_cascade(label="1.5.1", menu=version_menu)
+menubar.add_cascade(label="1.5.2", menu=version_menu)
 root.config(menu=menubar)
 root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo_no_confirm)
