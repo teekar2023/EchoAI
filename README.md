@@ -1,37 +1,33 @@
-# Version 1.5.2
-***
-# Please Note
-EchoAI Is New And Has Lots Of Bugs And Problems!
-
-It Takes A Minute Or Two To Start Up Sometimes So Please Be Patient!
+# Version 1.6.0
 ***
 # Description
-EchoAI is a simple AI Personal Assistant that has basic functions! More functions Are Coming Soon!
+EchoAI Is A Simple AI Personal Assistant That Has Basic Functions! More Functions Are Actively Being Developed!
 
-Please Email Me (sree23palla@outlook.com) For Help, Bug Reports, Or Suggestions!
+Please Email Me Anytime At sree23palla@outlook.com For Help, Bug Reports, Or Suggestions!
 
 Thank You For Trying EchoAI!
 ***
 # Here's What It Looks Like:
-
+(Outdated Picture)
 ![img_1.png](img_1.png)
 ***
 # TODO
+* Add Background Tray Icon
 * Add Global Weather
 * Ambient Noise Adjusting Setting
 * Option To Change Font And Theme And Accent Colors In Settings
 * Built-In Games
-* Smart Home
+* Smart Home Integration
 * Reminders
 * Voice Commands For Timers
 * Alarms
-* Repeat After Me Command
-* Add Mini Mode
 * Custom YouTube Music Player Integration  
 * Switch To SocketServer
 ***
-# LICENSE
-
+# Known Bugs
+* EchoAI Thinks It Crashed When Restarting As Admin For Update
+***
+# License
 Copyright © 2021 Sreekar Palla
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -46,3 +42,4 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+***

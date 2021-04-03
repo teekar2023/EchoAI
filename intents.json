@@ -327,6 +327,35 @@
       "context": [
         ""
       ]
+    },
+    {
+      "tag": "coin flip",
+      "patterns": [
+        "flip a coin",
+        "coin flip"
+      ],
+      "responses": [
+        "Heads",
+        "Tails"
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "dice roll",
+      "patterns": [
+        "roll a x sided die",
+        "roll dice with x sides",
+        "roll a dice that has x sides",
+        "roll a die with x sides"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
     }
   ]
 }
