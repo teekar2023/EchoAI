@@ -1,0 +1,15 @@
+New README Window!
+New LICENSE Window!
+Added New 'Other' Menu Cascade!
+Added 'README' Button In New 'Other' Cascade!
+Added 'LICENSE' Button In New 'Other' Cascade!
+Removed Website Button From About Window!
+Removed Changelog Button From About Window!
+Added README Button To About Window!
+Added LICENSE Button To About Window!
+Added A Coin Flip Command!
+Added A Dice Roller Command!
+Re-Added Auto Update Check On Startup!
+Improved Response With Some Commands!
+Fixed Some Bugs With Files!
+A Few Other Minor Changes And Fixes!
