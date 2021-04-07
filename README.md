@@ -1,4 +1,4 @@
-# Version 1.6.0
+# Version 1.7.0
 ***
 # Description
 EchoAI Is A Simple AI Personal Assistant That Has Basic Functions! More Functions Are Actively Being Developed!
@@ -8,7 +8,7 @@ Please Email Me Anytime At sree23palla@outlook.com For Help, Bug Reports, Or Sug
 Thank You For Trying EchoAI!
 ***
 # Here's What It Looks Like:
-(Outdated Picture)
+(Outdated Image)
 ![img_1.png](img_1.png)
 ***
 # TODO
@@ -25,7 +25,7 @@ Thank You For Trying EchoAI!
 * Switch To SocketServer
 ***
 # Known Bugs
-* EchoAI Thinks It Crashed When Restarting As Admin For Update
+NONE
 ***
 # License
 Copyright © 2021 Sreekar Palla

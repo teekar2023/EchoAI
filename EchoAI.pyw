@@ -1,4 +1,4 @@
-#  Copyright © 2021 <Sreekar Palla>
+#  Copyright © 2021 Sreekar Palla
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 #  documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -12,18 +12,19 @@
 #  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 #  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
 import ctypes
 import json
 import logging
 import pickle
 import random
-import re
-import subprocess
 import time
 import urllib
 import webbrowser
+from pathlib import Path
 from datetime import date
 from threading import Thread
+from tkinter import *
 from tkinter.filedialog import *
 from tkinter.messagebox import *
 from tkinter.simpledialog import *
@@ -36,6 +37,7 @@ import requests
 import speech_recognition as sr
 import wikipedia
 import wolframalpha
+from bs4 import BeautifulSoup
 from keras.models import load_model
 from nltk import WordNetLemmatizer
 
@@ -184,12 +186,12 @@ def is_admin():
         return False
 
 
-def update_echo():  # TODO Use Threading
+def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.6.0":
-        logging.warning("Newer Version Available! Current Version: 1.6.0")
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.7.0":
+        logging.warning("Newer Version Available! Current Version: 1.7.0")
         new_url = str(redirected_url) + "/EchoAI.Setup.exe"
         download_url = new_url.replace("tag", "download")
         update_window = Toplevel(root)
@@ -201,11 +203,18 @@ def update_echo():  # TODO Use Threading
         update_text.pack()
         int_var = IntVar(update_window)
         update_button = Button(update_window, command=lambda: int_var.set(1), font=("TrebuchetMS", 12, 'bold'),
-                               text="Download Update", width="500", height="10",
+                               text="Download Update", width="500", height="5",
                                bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
         update_button.pack()
-        changelog_text = Label(update_window, text="Changelog Will Soon Show Up Here!")
+        changelog_text = Text(update_window, bd=0, bg="white", height="25", width="75", font="TrebuchetMS")
         changelog_text.pack()
+        try:
+            changelog_content = str(open(f"{current_directory}\\Temp\\changelog.txt", mode="r+", encoding="utf8").read())
+            changelog_text.insert(END, 'CHANGELOG:\n' + changelog_content)
+            pass
+        except Exception:
+            changelog_text.insert(END, "There Was And Error Downloading Changelog Information!")
+            pass
         update_button.wait_variable(int_var)
         if is_admin():
             f = asksaveasfile(mode='wb')
@@ -233,13 +242,16 @@ def update_echo():  # TODO Use Threading
                     f.write(data)
                 logging.info("Finished Downloading Update Installer")
                 root.title("EchoAI")
-                install_confirmation = askyesno(title="Update", message=f"Update Completed! Would You Like To Install?")
+                file_string = str(f)
+                installed_file1 = file_string.replace("<_io.BufferedWriter name='", "")
+                installed_file2 = installed_file1.replace("'>", "")
+                f.close()
+                p = Path(f"{installed_file2}")
+                p.rename(p.with_suffix('.exe'))
+                install_confirmation = askyesno(title="Update", message=f"Update Completed! Would You Like To Install? Installer Location: {installed_file2}.exe")
                 if install_confirmation:
-                    file_string = str(f)
-                    installed_file1 = file_string.replace("<_io.BufferedWriter name='", "")
-                    installed_file2 = installed_file1.replace("'>", "")
-                    f.close()
-                    subprocess.call(f"{installed_file2}")
+                    os.system(f"start {installed_file2}")
+                    logging.info("Exiting For Update Install")
                     exit()
                 else:
                     return
@@ -252,11 +264,19 @@ def update_echo():  # TODO Use Threading
                 exit_echo_no_confirm()
             else:
                 webbrowser.open(download_url)
-                exit_echo()
+                logging.info("Exiting For Update Install")
+                exit()
     else:
         showinfo(title="Update", message="There Is No New Update Available!")
         logging.info("No New Update Available")
         echo_input()
+
+
+def uninstall_echo():
+    os.system("start unins000.exe")
+    time.sleep(1)
+    logging.info("Exiting For Uninstall")
+    exit()
 
 
 def save_conversation():
@@ -265,6 +285,8 @@ def save_conversation():
     file = asksaveasfile(mode="w", defaultextension=".txt")
     file.write(conversation)
     file.close()
+    fp = Path(f"{file}")
+    fp.rename(fp.with_suffix('.txt'))
 
 
 def contact_developer():
@@ -278,30 +300,18 @@ def changelog():
     changelog_window.title("EchoAI - Changelog")
     changelog_window.geometry("500x500")
     changelog_window.resizable(width=False, height=False)
-    changelog_text = Label(changelog_window, text="New In EchoAI v1.6.0:\n"
-                                                  "New README Window!\n"
-                                                  "New LICENSE Window!\n"
-                                                  "Added New 'Other' Menu Cascade!\n"
-                                                  "Added 'README' Button In New 'Other' Cascade!\n"
-                                                  "Added 'LICENSE' Button In New 'Other' Cascade!\n"
-                                                  "Removed Website Button From About Window!\n"
-                                                  "Removed Changelog Button From About Window!\n"
-                                                  "Added README Button To About Window!\n"
-                                                  "Added LICENSE Button To About Window!\n"
-                                                  "Added A Coin Flip Command!\n"
-                                                  "Added A Dice Roller Command!\n"
-                                                  "Re-Added Auto Update Check On Startup!\n"
-                                                  "Improved Response With Some Commands!\n"
-                                                  "Fixed Some Bugs With Files!\n"
-                                                  "A Few Other Minor Changes And Fixes!\n"
-                                                  "Please Report Any Bugs On The Github Page Or Email Me At "
-                                                  "sree23palla@outlook.com\n "
-                                                  "Thanks For Using EchoAI!\n"
-                                                  "Click The Button Below To Check For Updates!")
+    changelog_text = Text(changelog_window, bd=0, bg="white", height="25", width="75", font="TrebuchetMS")
     update_button = Button(changelog_window, command=update_echo, font=("TrebuchetMS", 12, 'bold'),
                            text="Click Here To Check For Updates!", width="500", height="50",
                            bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff')
-    changelog_text.pack(pady=10)
+    changelog_text.pack()
+    try:
+        changelog_content = str(open(f"{current_directory}\\CHANGELOG.txt", mode="r+", encoding="utf8").read())
+        changelog_text.insert(END, changelog_content)
+        pass
+    except Exception:
+        changelog_text.insert(END, "There Was An Error Reading Changelog Information!")
+        pass
     update_button.pack()
 
 
@@ -311,7 +321,7 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.6.0\n"
+                       text="EchoAI v1.7.0\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
@@ -534,9 +544,9 @@ def echo_help():
         "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "Check For The Latest Update By Clicking The Update Button In the 1.6.0 Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.7.0 Dropdown At The Top Of The Main Window!",
         "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
-        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.6.0 Dropdown At The Top Of The Main Window!",
+        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.7.0 Dropdown At The Top Of The Main Window!",
         "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
         "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!"]
     random.shuffle(list_of_modules)
@@ -705,13 +715,13 @@ def echo_timer():
         root.update()
         time.sleep(1)
         if (temp == 0):
+            showinfo("EchoAI - Timer", "Timer Ended!")
             timer_window.destroy()
-            messagebox.showinfo("EchoAI - Timer", "Timer Ended!")
         temp -= 1
 
 
 def clean_up_sentence(sentence):
-    logging.info("Cleaning Up User Command Sentence")
+    logging.info(f"Cleaning Up User Command Sentence: {sentence}")
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
     return sentence_words
@@ -997,7 +1007,7 @@ def command():
         with mic as source:
             logging.info("Listening For Command")
             audio = rec.listen(source, timeout=30, phrase_time_limit=3)
-            cmd: str = rec.recognize_google(audio)
+            cmd = str(rec.recognize_google(audio))
             logging.info(f"User Said: {cmd}")
             ChatLog.config(state=NORMAL)
             ChatLog.insert(END, f"{name}: " + cmd + '\n\n')
@@ -1048,12 +1058,17 @@ try:
             f.seek(-2, os.SEEK_CUR)
         last_line = f.readline().decode()
     if " - comtypes - DEBUG - CoUnititialize() done." not in last_line and "- root - WARNING - Restarting EchoAI" not in last_line\
-            and last_line != "use" and last_line != "" and not last_line.isspace():
+            and last_line != "use" and last_line != "" and not last_line.isspace() and "Exiting For Update Install" not in last_line\
+            and "Exiting For Uninstall" not in last_line and "Saved User Data In Setup" not in last_line:
         report_bug = askyesno(title="Crash Detected",
                               message="It Appears That EchoAI Ran Into A Problem Last Time It Was Used. Would You Like "
                                       "To Submit A Bug Report?")
         if report_bug:
-            bug_report()
+            bug_report_thread = Thread(target=bug_report)
+            bug_report_thread.start()
+            pass
+        else:
+            pass
 except OSError:
     pass
 log_file.truncate()
@@ -1078,6 +1093,7 @@ echo_menu.add_command(label="About", command=about_echo)
 echo_menu.add_command(label="Help", command=echo_help)
 echo_menu.add_command(label="Settings", command=echo_settings)
 version_menu.add_command(label="Update", command=update_echo)
+version_menu.add_command(label="Uninstall", command=uninstall_echo)
 echo_menu.add_command(label="Reset", command=reset_echo)
 echo_menu.add_command(label="Restart", command=restart_echo)
 echo_menu.add_command(label="Exit", command=exit_echo)
@@ -1094,7 +1110,7 @@ menubar.add_cascade(label="Echo", menu=echo_menu)
 menubar.add_cascade(label="Device", menu=device_menu)
 menubar.add_cascade(label="Tools", menu=tools_menu)
 menubar.add_cascade(label="Other", menu=other_menu)
-menubar.add_cascade(label="1.6.0", menu=version_menu)
+menubar.add_cascade(label="1.7.0", menu=version_menu)
 root.config(menu=menubar)
 root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo_no_confirm)
@@ -1130,14 +1146,35 @@ logging.info("Checking For Update On Startup")
 url = "http://github.com/teekar2023/EchoAI/releases/latest/"
 r = requests.get(url, allow_redirects=True)
 redirected_url = r.url
-if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.6.0":
-    logging.warning("Newer Version Available! Current Version: 1.6.0")
-    ChatLog.insert(END, "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.6.0 Dropdown To "
+if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.7.0":
+    logging.warning("Newer Version Available! Current Version: 1.7.0")
+    logging.info("Downloading New Version Changelog")
+    changelog_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/CHANGELOG.txt"
+    changelog_download = urllib.request.urlopen(changelog_url)
+    try:
+        open(f"{current_directory}\\Temp\\Temp\\changelog.txt", mode="w+", encoding="utf8").truncate()
+    except Exception:
+        pass
+    changelog_file = open(f"{current_directory}\\Temp\\changelog.txt", mode="wb")
+    try:
+        while True:
+            changelog_data = changelog_download.read()
+            if not changelog_data:
+                break
+            else:
+                changelog_file.write(changelog_data)
+        pass
+    except Exception:
+        changelog_file.write(str.encode("There Was An Error Downloading Changelog information!"))
+        pass
+    changelog_file.close()
+    ChatLog.insert(END, "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.7.0 Dropdown To "
                         "Download The Update Installer!\n\n")
     pass
 else:
     pass
 logging.info("Done With Startup. Moving Onto echo_input() Function")
 ChatLog.config(state=DISABLED)
-echo_input()
+main_thread = Thread(target=echo_input)
+main_thread.start()
 root.mainloop()

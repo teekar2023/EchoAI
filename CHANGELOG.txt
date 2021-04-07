@@ -1,15 +1,11 @@
-New README Window!
-New LICENSE Window!
-Added New 'Other' Menu Cascade!
-Added 'README' Button In New 'Other' Cascade!
-Added 'LICENSE' Button In New 'Other' Cascade!
-Removed Website Button From About Window!
-Removed Changelog Button From About Window!
-Added README Button To About Window!
-Added LICENSE Button To About Window!
-Added A Coin Flip Command!
-Added A Dice Roller Command!
-Re-Added Auto Update Check On Startup!
-Improved Response With Some Commands!
-Fixed Some Bugs With Files!
-A Few Other Minor Changes And Fixes!
+Added Updated Version Changelog In Update Window!
+Added A Changelog File!
+Added Uninstall Option In v1.7.0 Dropdown Menu!
+Added Utilization Of Multiple System Threads!
+Updated Some UI Elements!
+Fixed Some Problems With Update Installation!
+Fixed A Bug With Setup!
+Some Other Changes And Fixes!
+Please Report Any Bugs On The Github Page Or Email Me At 
+sree23palla@outlook.com
+Thanks For Using EchoAI!
