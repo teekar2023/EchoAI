@@ -1,4 +1,4 @@
-# Version 1.7.0
+# Version 1.8.0
 ***
 # Description
 EchoAI Is A Simple AI Personal Assistant That Has Basic Functions! More Functions Are Actively Being Developed!

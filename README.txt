@@ -1,13 +1,13 @@
-# Version 1.7.0
+Version 1.8.0
 ***
-# Description
+Description
 EchoAI Is A Simple AI Personal Assistant That Has Basic Functions! More Functions Are Actively Being Developed!
 
 Please Email Me Anytime At sree23palla@outlook.com For Help, Bug Reports, Or Suggestions!
 
 Thank You For Trying EchoAI!
-***
-# TODO
+*** 
+TODO
 * Add Background Tray Icon
 * Add Global Weather
 * Ambient Noise Adjusting Setting
@@ -20,10 +20,10 @@ Thank You For Trying EchoAI!
 * Custom YouTube Music Player Integration  
 * Switch To SocketServer
 ***
-# Known Bugs
+Known Bugs
 NONE
 ***
-# License
+License
 Copyright © 2021 Sreekar Palla
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

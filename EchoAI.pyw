@@ -12,7 +12,6 @@
 #  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 #  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
 import ctypes
 import json
 import logging
@@ -21,6 +20,7 @@ import random
 import time
 import urllib
 import webbrowser
+import shutil
 from pathlib import Path
 from datetime import date
 from threading import Thread
@@ -31,21 +31,147 @@ from tkinter.simpledialog import *
 
 import nltk
 import numpy as np
-import pyautogui as gui
+import pyautogui as kbm
 import pyttsx3
 import requests
 import speech_recognition as sr
 import wikipedia
 import wolframalpha
-from bs4 import BeautifulSoup
 from keras.models import load_model
 from nltk import WordNetLemmatizer
 
 lemmatizer = WordNetLemmatizer()
-model = load_model('EchoAI_model.h5')
-intents = json.loads(open('intents.json').read())
-words = pickle.load(open('words.pkl', 'rb'))
-classes = pickle.load(open('classes.pkl', 'rb'))
+
+
+def echo_recovery():
+    try:
+        while True:
+            if not os.path.exists(f"{current_directory}\\EchoAI_model.h5"):
+                model_url = "https://github.com/teekar2023/EchoAI/raw/master/EchoAI_model.h5"
+                model_download = urllib.request.urlopen(model_url)
+                open("EchoAI_model.h5", "w+")
+                model_file = open("EchoAI_model.h5", "wb")
+                while True:
+                    model_data = model_download.read()
+                    if not model_data:
+                        break
+                    else:
+                        pass
+                    model_file.write(model_data)
+            if not os.path.exists(f"{current_directory}\\intents.json"):
+                intents_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/intents.json"
+                intents_download = urllib.request.urlopen(intents_url)
+                open("intents.json", "w+")
+                intents_file = open("intents.json", "wb")
+                while True:
+                    intents_data = intents_download.read()
+                    if not intents_data:
+                        break
+                    else:
+                        pass
+                    intents_file.write(intents_data)
+            if not os.path.exists(f"{current_directory}\\words.pkl"):
+                words_url = "https://github.com/teekar2023/EchoAI/raw/master/words.pkl"
+                words_download = urllib.request.urlopen(words_url)
+                open("words.pkl", "w+")
+                words_file = open("words.pkl", "wb")
+                while True:
+                    words_data = words_download.read()
+                    if not words_data:
+                        break
+                    else:
+                        pass
+                    words_file.write(words_data)
+            if not os.path.exists(f"{current_directory}\\classes.pkl"):
+                classes_url = "https://github.com/teekar2023/EchoAI/raw/master/classes.pkl"
+                classes_download = urllib.request.urlopen(classes_url)
+                open("classes.pkl", "w+")
+                classes_file = open("classes.pkl", "wb")
+                while True:
+                    classes_data = classes_download.read()
+                    if not classes_data:
+                        break
+                    else:
+                        pass
+                    classes_file.write(classes_data)
+            if not os.path.exists(f"{current_directory}\\echo.png"):
+                icon_url = "https://github.com/teekar2023/EchoAI/raw/master/echo.png"
+                icon_download = urllib.request.urlopen(icon_url)
+                open("echo.png", "w+")
+                icon_file = open("echo.png", "wb")
+                while True:
+                    icon_data = icon_download.read()
+                    if not icon_data:
+                        break
+                    else:
+                        pass
+                    icon_file.write(icon_data)
+            if not os.path.exists(f"{current_directory}\\app.log"):
+                open(f"{current_directory}\\app.log", "w+")
+            if not os.path.exists(f"{current_directory}\\README.txt"):
+                readme_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/README.txt"
+                readme_download = urllib.request.urlopen(readme_url)
+                open("README.txt", "w+")
+                readme_file = open("README.txt", "wb")
+                while True:
+                    readme_data = readme_download.read()
+                    if not readme_data:
+                        break
+                    else:
+                        pass
+                    readme_file.write(readme_data)
+            if not os.path.exists(f"{current_directory}\\LICENSE.txt"):
+                license_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/LICENSE.txt"
+                license_download = urllib.request.urlopen(license_url)
+                open("LICENSE.txt", "w+")
+                license_file = open("LICENSE.txt", "wb")
+                while True:
+                    license_data = license_download.read()
+                    if not license_data:
+                        break
+                    else:
+                        pass
+                    license_file.write(license_data)
+            if not os.path.exists(f"{current_directory}\\CHANGELOG.txt"):
+                changelog_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/CHANGELOG.txt"
+                changelog_download = urllib.request.urlopen(changelog_url)
+                open(f"{current_directory}\\Temp\\Temp\\changelog.txt", mode="w+", encoding="utf8")
+                while True:
+                    changelog_data = changelog_download.read()
+                    if not changelog_data:
+                        break
+                    else:
+                        pass
+                    changelog_file.write(changelog_data)
+            else:
+                break
+        showinfo(title="EchoAI Recovery",
+                 message="Recovery Was Successfully Completed! If You Continue Facing Problems, Please Re-Install EchoAI! EchoAI Will Now Be Restarted!")
+        restart_echo_no_confirm()
+        exit()
+    except Exception:
+        showerror(title="EchoAI Recovery",
+                  message="EchoAI File Recovery Failed! Please Try Again Or Re-Install EchoAI!")
+
+
+def exit_echo_no_confirm():
+    logging.warning("Exiting EchoAI Without Confirmation!")
+    root.destroy()
+    exit()
+
+
+try:
+    model = load_model('EchoAI_model.h5')
+    intents = json.loads(open('intents.json').read())
+    words = pickle.load(open('words.pkl', 'rb'))
+    classes = pickle.load(open('classes.pkl', 'rb'))
+    ico_image = open("echo.png", "rb")
+    log_file = open("app.log", "r+")
+    log_bytes = open("app.log", "rb")
+except Exception as e:
+    showerror(title="EchoAI", message="Some Required Files Seem To Be Missing! EchoAI Will Now Enter Recovery Mode To Connect To The Internet And Fix The Problem! Warning: EchoAI Will Not Be Responsive During This Process!")
+    echo_recovery()
+    exit_echo_no_confirm()
 
 
 def setup():
@@ -141,8 +267,8 @@ def setup():
         logging.info("Saved User Data In Setup")
         settings_file.close()
         data_file.close()
-        showinfo(title="Setup", message="Setup Completed! Please Restart!")
-        restart_echo()
+        showinfo(title="EchoAI Setup", message="Setup Completed! EchoAI Will Now Restart")
+        restart_echo_no_confirm()
 
 
 def reset_echo():
@@ -162,6 +288,72 @@ def reset_echo():
     else:
         showinfo(title="Reset", message="Reset Aborted!")
         echo_input()
+
+
+def backup_echo():
+    if not os.path.exists(f"{user_dir}\\Documents\\EchoAI"):
+        logging.info("Creatine User Backup Directories")
+        os.mkdir(f"{user_dir}\\Documents\\EchoAI")
+        os.mkdir(f"{user_dir}\\Documents\\EchoAI\\Backup")
+        if not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json") and not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json"):
+            backup_confirmation = askyesno(title="Backup", message=f"Backup Files Will Be Saved To {user_dir}\\Documents\\EchoAI\\Backup...Do You Want To Continue?")
+            if backup_confirmation:
+                logging.warning("Backing Up EchoAI")
+                try:
+                    shutil.copy(f"{current_directory}\\Data\\settings.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    shutil.copy(f"{current_directory}\\Data\\UserData.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    showinfo("Backup Successfully Completed!")
+                except Exception as e:
+                    logging.error(f"Error While Performing Backup: {e}")
+                    showerror(f"There Was A Problem During Backup! Error:{e}")
+            else:
+                showinfo(title="Backup", message="Backup Was Not Created!")
+        else:
+            logging.warning("Existing Backup Found")
+            existing_backup = askyesno(title="Backup", message="There Is Already An Existing Backup! Would You Like To Replace It?")
+            if existing_backup:
+                logging.warning("Attempting To Replace Existing Backup")
+                try:
+                    os.remove(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    os.remove(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    shutil.copy(f"{current_directory}\\Data\\settings.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    shutil.copy(f"{current_directory}\\Data\\UserData.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    showinfo("Backup Successfully Completed!")
+                except Exception as e:
+                    logging.error(f"Error During Backup Replace: {e}")
+                    showerror(f"There Was A Problem During Backup! Error:{e}")
+            else:
+                showinfo(title="Backup", message="Backup Was Not Replaced!")
+    else:
+        if not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json") and not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json"):
+            backup_confirmation = askyesno(title="Backup", message=f"Backup Files Will Be Saved To {user_dir}\\Documents\\EchoAI\\Backup...Do You Want To Continue?")
+            if backup_confirmation:
+                logging.warning("Backing Up EchoAI")
+                try:
+                    shutil.copy(f"{current_directory}\\Data\\settings.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    shutil.copy(f"{current_directory}\\Data\\UserData.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    showinfo("Backup Successfully Completed!")
+                except Exception as e:
+                    logging.error(f"Error While Performing Backup: {e}")
+                    showerror(f"There Was A Problem During Backup! Error:{e}")
+            else:
+                showinfo(title="Backup", message="Backup Was Not Created!")
+        else:
+            logging.warning("Existing Backup Found")
+            existing_backup = askyesno(title="Backup", message="There Is Already An Existing Backup! Would You Like To Replace It?")
+            if existing_backup:
+                logging.warning("Attempting To Replace Existing Backup")
+                try:
+                    os.remove(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    os.remove(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    shutil.copy(f"{current_directory}\\Data\\settings.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json")
+                    shutil.copy(f"{current_directory}\\Data\\UserData.json", f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json")
+                    showinfo("Backup Successfully Completed!")
+                except Exception as e:
+                    logging.error(f"Error During Backup Replace: {e}")
+                    showerror(f"There Was A Problem During Backup! Error:{e}")
+            else:
+                showinfo(title="Backup", message="Backup Was Not Replaced!")
 
 
 def open_website():
@@ -190,10 +382,19 @@ def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.7.0":
-        logging.warning("Newer Version Available! Current Version: 1.7.0")
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.8.0":
+        logging.warning("Newer Version Available! Current Version: 1.8.0")
         new_url = str(redirected_url) + "/EchoAI.Setup.exe"
         download_url = new_url.replace("tag", "download")
+        backup_ask = askyesno(title="Backup", message="It Is Recommended To Take A Before Updating! Would You Like To Perform A Backup?")
+        if backup_ask:
+            logging.info("Backing Up Before Update")
+            backup_thread = Thread(target=backup_echo)
+            backup_thread.join()
+            pass
+        else:
+            logging.warning("Backup Before Update Denied")
+            pass
         update_window = Toplevel(root)
         update_window.title("Update EchoAI")
         update_window.geometry("500x500")
@@ -210,14 +411,14 @@ def update_echo():
         changelog_text.pack()
         try:
             changelog_content = str(open(f"{current_directory}\\Temp\\changelog.txt", mode="r+", encoding="utf8").read())
-            changelog_text.insert(END, 'CHANGELOG:\n' + changelog_content)
+            changelog_text.insert(END, changelog_content)
             pass
         except Exception:
             changelog_text.insert(END, "There Was And Error Downloading Changelog Information!")
             pass
         update_button.wait_variable(int_var)
         if is_admin():
-            f = asksaveasfile(mode='wb')
+            f = asksaveasfile(mode='wb', defaultextenstion=".exe")
             if f is None:
                 return
             else:
@@ -246,8 +447,6 @@ def update_echo():
                 installed_file1 = file_string.replace("<_io.BufferedWriter name='", "")
                 installed_file2 = installed_file1.replace("'>", "")
                 f.close()
-                p = Path(f"{installed_file2}")
-                p.rename(p.with_suffix('.exe'))
                 install_confirmation = askyesno(title="Update", message=f"Update Completed! Would You Like To Install? Installer Location: {installed_file2}.exe")
                 if install_confirmation:
                     os.system(f"start {installed_file2}")
@@ -321,7 +520,7 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.7.0\n"
+                       text="EchoAI v1.8.0\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
@@ -544,11 +743,12 @@ def echo_help():
         "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "Check For The Latest Update By Clicking The Update Button In the 1.7.0 Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.8.0 Dropdown At The Top Of The Main Window!",
         "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
-        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.7.0 Dropdown At The Top Of The Main Window!",
+        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.8.0 Dropdown At The Top Of The Main Window!",
         "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
-        "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!"]
+        "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!",
+        "You Can Create A Backup Of All Your Data And Settings By Using The Backup Button In The ECHO Dropdown At The Top Of The Main Window!",]
     random.shuffle(list_of_modules)
     random.shuffle(list_of_tips)
     item_one = list_of_modules[0]
@@ -580,6 +780,12 @@ def restart_echo():
         echo_input()
 
 
+def restart_echo_no_confirm():
+    logging.warning("Restarting EchoAI Without Confirmation")
+    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+    exit_echo_no_confirm
+
+
 def exit_echo():
     exit_confirmation = askyesno(title="Exit", message="Are You Sure You Want To Exit EchoAI?")
     if exit_confirmation:
@@ -600,19 +806,13 @@ def exit_echo_param(event):
         echo_input()
 
 
-def exit_echo_no_confirm():
-    logging.warning("Exiting EchoAI Without Confirmation!")
-    root.destroy()
-    exit()
-
-
 def system_information():
     showinfo(title="System Information", message="Check The Terminal Window That Is About To Open!")
     logging.info("Starting Command Prompt")
     os.system("start cmd")
     time.sleep(2)
     logging.info("Executing Terminal Command: systeminfo")
-    gui.typewrite(message="systeminfo\n")
+    kbm.typewrite(message="systeminfo\n")
 
 
 def task_manager():
@@ -640,7 +840,7 @@ def terminal_command():
         os.system("start cmd")
         time.sleep(2)
         logging.info(f"Executing Terminal Command: {terminal_input}")
-        gui.typewrite(f"{terminal_input}\n")
+        kbm.typewrite(f"{terminal_input}\n")
 
 
 def sign_out():
@@ -648,6 +848,7 @@ def sign_out():
     if lock_confirmation:
         logging.info("Signing Out Of Device")
         os.system("shutdown -l")
+        exit_echo_no_confirm()
     else:
         echo_input()
 
@@ -657,6 +858,7 @@ def shutdown_device():
     if shutdown_confirmation:
         logging.info("Shutting Down Device")
         os.system("shutdown /s /t 2")
+        exit_echo_no_confirm()
     else:
         echo_input()
 
@@ -666,6 +868,7 @@ def restart_device():
     if restart_confirmation:
         logging.info("Restarting Device")
         os.system("shutdown /r /t 2")
+        exit_echo_no_confirm()
     else:
         echo_input()
 
@@ -1047,8 +1250,7 @@ root.iconphoto(False, icon_image)
 root.geometry("500x600")
 root.resizable(width=FALSE, height=FALSE)
 current_directory = os.getcwd()
-log_file = open("app.log", "r+")
-log_bytes = open("app.log", "rb")
+user_dir = os.path.expanduser("~")
 logging.basicConfig(filename='app.log', filemode='r+', level="DEBUG",
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 try:
@@ -1094,6 +1296,7 @@ echo_menu.add_command(label="Help", command=echo_help)
 echo_menu.add_command(label="Settings", command=echo_settings)
 version_menu.add_command(label="Update", command=update_echo)
 version_menu.add_command(label="Uninstall", command=uninstall_echo)
+echo_menu.add_command(label="Backup", command=backup_echo)
 echo_menu.add_command(label="Reset", command=reset_echo)
 echo_menu.add_command(label="Restart", command=restart_echo)
 echo_menu.add_command(label="Exit", command=exit_echo)
@@ -1110,7 +1313,7 @@ menubar.add_cascade(label="Echo", menu=echo_menu)
 menubar.add_cascade(label="Device", menu=device_menu)
 menubar.add_cascade(label="Tools", menu=tools_menu)
 menubar.add_cascade(label="Other", menu=other_menu)
-menubar.add_cascade(label="1.7.0", menu=version_menu)
+menubar.add_cascade(label="1.8.0", menu=version_menu)
 root.config(menu=menubar)
 root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo_no_confirm)
@@ -1120,10 +1323,31 @@ logging.info("Checking Data To See If Set Up")
 user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
 if user_data_file_check == "" or user_data_file_check.isspace():
     logging.info("User Data Not Found. Setup Incomplete")
-    showinfo(title="Setup", message="You Have Not Set Up EchoAI Yet! The Following Process Will Help With Setup!")
-    logging.info("Setup Prompt Shown")
-    setup()
-    exit_echo_no_confirm()
+    if not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json") and not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json"):
+        showinfo(title="Setup", message="You Have Not Set Up EchoAI Yet! The Window About To Open Will Get You Set Up!")
+        logging.info("Setup Prompt Shown")
+        setup()
+        exit_echo_no_confirm()
+    else:
+        logging.warning("Existing User Backup Found")
+        restore_backup_confirm = askyesno(title="Backup", message="Backup Files Have Been Found On Your Device! Would You Like To Restore This Backup?")
+        if restore_backup_confirm:
+            logging.warning("Restoring Existing User Backup")
+            try:
+                os.remove(f"{current_directory}\\Data\\settings.json")
+                os.remove(f"{current_directory}\\Data\\UserData.json")
+                shutil.copy(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json", f"{current_directory}\\Data\\settings.json")
+                shutil.copy(f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json", f"{current_directory}\\Data\\UserData.json")
+                showinfo(title="Backup Restore", message="Backup Was Restored Successfully! Please Restart EchoAI For Changes To Take Effect!")
+                restart_echo()
+            except Exception as e:
+                logging.error(f"Error During User Backup Restore: {e}")
+                showerror(title="Backup Restore", message=f"An Error Occured During Backup Restore! Error: {e}")
+                exit()
+        else:
+            logging.warning("User Backup Restore Denied")
+            setup()
+            exit_echo_no_confirm()
 else:
     pass
 logging.info("User Data Found. EchoAI Is Already Set Up")
@@ -1146,8 +1370,8 @@ logging.info("Checking For Update On Startup")
 url = "http://github.com/teekar2023/EchoAI/releases/latest/"
 r = requests.get(url, allow_redirects=True)
 redirected_url = r.url
-if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.7.0":
-    logging.warning("Newer Version Available! Current Version: 1.7.0")
+if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.8.0":
+    logging.warning("Newer Version Available! Current Version: 1.8.0")
     logging.info("Downloading New Version Changelog")
     changelog_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/CHANGELOG.txt"
     changelog_download = urllib.request.urlopen(changelog_url)
@@ -1165,10 +1389,10 @@ if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.7.0":
                 changelog_file.write(changelog_data)
         pass
     except Exception:
-        changelog_file.write(str.encode("There Was An Error Downloading Changelog information!"))
+        changelog_file.write(str.encode("There Was An Error Downloading Changelog Information!"))
         pass
     changelog_file.close()
-    ChatLog.insert(END, "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.7.0 Dropdown To "
+    ChatLog.insert(END, "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.8.0 Dropdown To "
                         "Download The Update Installer!\n\n")
     pass
 else:
