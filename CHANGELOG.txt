@@ -1,10 +1,11 @@
-EchoAI Version 1.8.0 Changelog
-Added A Backup Option In The ECHO Dropdown Menu!
-Added Prompt For Backup Before Updating!
-Added Backup Restore Option On First Use!
-Added Automatic File Corruption Detection!
-Added Recovery Option If File Corruption Is Detected!
-Added More Threading!
+EchoAI Version 1.9.0 Changelog
+Fixed A Bug Where EchoAI Would Not Exit Properly!
+Wikipedia Summary Previews Are Now 3 Sentences!
+Wikipedia Results Now Provide The Link And Title Of Page!
+Improved Web Searches And Results!
+Fixed Bugs With Backup!
+Fixed Bugs With Update Installation!
+Fixed Bugs With Uninstallation!
 Few Other Small Changes And Fixes!
 Please Report Any Bugs On The Github Page Or Email Me At 
 sree23palla@outlook.com
