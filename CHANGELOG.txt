@@ -1,12 +1,12 @@
-EchoAI Version 1.9.0 Changelog
-Fixed A Bug Where EchoAI Would Not Exit Properly!
-Wikipedia Summary Previews Are Now 3 Sentences!
-Wikipedia Results Now Provide The Link And Title Of Page!
-Improved Web Searches And Results!
-Fixed Bugs With Backup!
-Fixed Bugs With Update Installation!
-Fixed Bugs With Uninstallation!
-Few Other Small Changes And Fixes!
+EchoAI Version 1.10 Changelog
+Added Installation Instructions In README!
+Added Voice Command For Device Shutdown!
+Added Voice Command For Device Restart!
+Added Voice Command For Signing Out Of Device!
+Added Data File Restoration!
+Fixed A Bug With EchoAI Restart!
+Fixed Some Bugs With Crash Detection And Logging!
+Other Minor Changes And Fixes!
 Please Report Any Bugs On The Github Page Or Email Me At 
 sree23palla@outlook.com
 Thanks For Using EchoAI!

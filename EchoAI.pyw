@@ -399,8 +399,8 @@ def update_echo():
     url = "http://github.com/teekar2023/EchoAI/releases/latest/"
     r = requests.get(url, allow_redirects=True)
     redirected_url = r.url
-    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.9.0":
-        logging.warning("Newer Version Available! Current Version: 1.9.0")
+    if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.10":
+        logging.warning("Newer Version Available! Current Version: 1.10")
         new_url = str(redirected_url) + "/EchoAI.Setup.exe"
         download_url = new_url.replace("tag", "download")
         backup_ask = askyesno(title="Backup",
@@ -616,7 +616,7 @@ def about_echo():
     about_window.geometry("400x400")
     about_window.resizable(width=False, height=False)
     about_text = Label(about_window,
-                       text="EchoAI v1.9.0\n"
+                       text="EchoAI v1.10\n"
                             "EchoAI Is A FOSS Simple AI Personal Assistant!\n"
                             "Developed By: Sreekar Palla\n"
                             "Icon Designed By: Vijay Kesevan\n"
@@ -839,9 +839,9 @@ def echo_help():
         "Find Out What Your Device Is Doing By Clicking On The Task Manager Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "View Information About Your Device By Clicking The System Information Button In The DEVICE Dropdown At The Top Of The Main Window!",
         "Run Any Terminal Command By Clicking The Terminal Command Button In The DEVICE Dropdown At The Top Of The Main Window!",
-        "Check For The Latest Update By Clicking The Update Button In the 1.9.0 Dropdown At The Top Of The Main Window!",
+        "Check For The Latest Update By Clicking The Update Button In the 1.10 Dropdown At The Top Of The Main Window!",
         "Quickly Press <Esc> And <Enter> To Exit EchoAI!",
-        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.9.0 Dropdown At The Top Of The Main Window!",
+        "Check Out EchoAI's Source Code And More By Clicking The Website Button In The 1.10 Dropdown At The Top Of The Main Window!",
         "Reach Out To The Developer By Clicking The Contact Developer Button In The ECHO Dropdown At The Top Of The Main Window!",
         "Submit A Bug Report By Clicking The Report Problem Button In The ECHO Dropdown At The Top Of The Main Window!",
         "You Can Create A Backup Of All Your Data And Settings By Using The Backup Button In The ECHO Dropdown At The Top Of The Main Window!", ]
@@ -879,7 +879,7 @@ def restart_echo():
 def restart_echo_no_confirm():
     logging.warning("Restarting EchoAI Without Confirmation")
     os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-    exit_echo_no_confirm
+    exit_echo_no_confirm()
 
 
 def exit_echo():
@@ -1306,6 +1306,41 @@ def get_response(ints, intents_json, query):
                     rolled_number = random.randint(min_face, max_face)
                     result = "Rolled:" + str(rolled_number)
                     return result
+            if tag == "shut down device":
+                shutdown_prompt = askyesno(title="Shutdown Device", message="Are You Sure You Want To Shut Down Your "
+                                                                            "Device?")
+                if shutdown_prompt:
+                    logging.info("Shutting Down Device")
+                    os.system("shutdown /s /t 2")
+                    result = "Shutting Down Device"
+                    return result
+                else:
+                    logging.info("Device Shutdown Cancelled")
+                    result = "Device Shutdown Cancelled"
+                    return result
+            if tag == "restart device":
+                restart_prompt = askyesno(title="Restart Device", message="Are You Sure You Want To Restart Your "
+                                                                          "Device?")
+                if restart_prompt:
+                    logging.info("Restarting Device")
+                    os.system("shutdown /r /t 2")
+                    result = "Restarting Device"
+                    return result
+                else:
+                    logging.info("Device Restart Cancelled")
+                    result = "Device Restart Cancelled"
+                    return result
+            if tag == "sign out of device":
+                sign_out_prompt = askyesno(title="Sign Out", message="Are You Sure You Want To Sign Out Of Your Device?")
+                if sign_out_prompt:
+                    logging.info("Signing Out Of Device")
+                    os.system("shutdown -l")
+                    result = "Signing Out Of Device"
+                    return result
+                else:
+                    logging.info("Device Sign Out Cancelled")
+                    result = "Device Sign Out Cancelled"
+                    return result
             else:
                 return result
 
@@ -1384,7 +1419,9 @@ try:
         last_line = f.readline().decode()
     if " - comtypes - DEBUG - CoUnititialize() done." not in last_line and "- root - WARNING - Restarting EchoAI" not in last_line \
             and last_line != "use" and last_line != "" and not last_line.isspace() and "Exiting For Update Install" not in last_line \
-            and "Exiting For Uninstall" not in last_line and "Saved User Data In Setup" not in last_line:
+            and "Exiting For Uninstall" not in last_line and "Saved User Data In Setup" not in last_line \
+            and "Shutting Down Device" not in last_line and "Restarting Device" not in last_line \
+            and "Signing Out Of Device" not in last_line:
         report_bug = askyesno(title="Crash Detected",
                               message="It Appears That EchoAI Ran Into A Problem Last Time It Was Used. Would You Like "
                                       "To Submit A Bug Report?")
@@ -1436,26 +1473,48 @@ menubar.add_cascade(label="Echo", menu=echo_menu)
 menubar.add_cascade(label="Device", menu=device_menu)
 menubar.add_cascade(label="Tools", menu=tools_menu)
 menubar.add_cascade(label="Other", menu=other_menu)
-menubar.add_cascade(label="1.9.0", menu=version_menu)
+menubar.add_cascade(label="1.10", menu=version_menu)
 root.config(menu=menubar)
 root.bind("<Escape>", exit_echo_param)
 root.protocol("WM_DELETE_WINDOW", exit_echo_no_confirm)
 ChatLog.config(font=("TrebuchetMS", 12))
 logging.info("Finished Building And Configuring GUI")
 logging.info("Checking Data To See If Set Up")
-user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
+try:
+    user_data_file_check = open(f"{current_directory}\\Data\\UserData.json").read()
+except Exception:
+    showerror(title="EchoAI", message="Data Files Not Detected! EchoAI Will Attempt To Create Them After Closing This "
+                                     "Error Message!")
+    try:
+        while True:
+            if not os.path.exists(f"{current_directory}\\Data"):
+                os.mkdir(f"{current_directory}\\Data")
+                pass
+            if not os.path.exists(f"{current_directory}\\Data\\UserData.json"):
+                open(f"{current_directory}\\Data\\UserData.json", "w+")
+                pass
+            if not os.path.exists(f"{current_directory}\\Data\\settings.json"):
+                open(f"{current_directory}\\Data\\settings.json", "w+")
+                pass
+            else:
+                break
+        showinfo(title="EchoAI", message="Required Data Files Were Successfully Created!")
+    except Exception as e:
+        showerror(title="EchoAI", message=f"Data File Restoration Failed! Error:{e}")
 if user_data_file_check == "" or user_data_file_check.isspace():
     logging.info("User Data Not Found. Setup Incomplete")
     if not os.path.exists(f"{user_dir}\\Documents\\EchoAI\\Backup\\settings.json") and not os.path.exists(
             f"{user_dir}\\Documents\\EchoAI\\Backup\\UserData.json"):
-        showinfo(title="Setup", message="You Have Not Set Up EchoAI Yet! The Window About To Open Will Get You Set Up!")
+        showinfo(title="Setup", message="You Have Not Set Up EchoAI Yet! The Window That Will Open After Closing This "
+                                        "Will Help You Get Started!")
         logging.info("Setup Prompt Shown")
         setup()
         exit_echo_no_confirm()
     else:
         logging.warning("Existing User Backup Found")
         restore_backup_confirm = askyesno(title="Backup",
-                                          message="Backup Files Have Been Found On Your Device! Would You Like To Restore This Backup?")
+                                          message="Backup Files Have Been Found On Your Device! Would You Like To "
+                                                  "Restore This Backup?")
         if restore_backup_confirm:
             logging.warning("Restoring Existing User Backup")
             try:
@@ -1470,8 +1529,8 @@ if user_data_file_check == "" or user_data_file_check.isspace():
                 restart_echo()
             except Exception as e:
                 logging.error(f"Error During User Backup Restore: {e}")
-                showerror(title="Backup Restore", message=f"An Error Occured During Backup Restore! Error: {e}")
-                sys.exit()
+                showerror(title="Backup Restore", message=f"An Error Occurred During Backup Restore! Error: {e}")
+                exit_echo_no_confirm()
         else:
             logging.warning("User Backup Restore Denied")
             setup()
@@ -1498,13 +1557,13 @@ logging.info("Checking For Update On Startup")
 url = "http://github.com/teekar2023/EchoAI/releases/latest/"
 r = requests.get(url, allow_redirects=True)
 redirected_url = r.url
-if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.9.0":
-    logging.warning("Newer Version Available! Current Version: 1.9.0")
+if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.10":
+    logging.warning("Newer Version Available! Current Version: 1.10")
     logging.info("Downloading New Version Changelog")
     changelog_url = "https://raw.githubusercontent.com/teekar2023/EchoAI/master/CHANGELOG.txt"
     changelog_download = urllib.request.urlopen(changelog_url)
     try:
-        open(f"{current_directory}\\Temp\\Temp\\changelog.txt", mode="w+", encoding="utf8").truncate()
+        open(f"{current_directory}\\Temp\\changelog.txt", mode="w+", encoding="utf8").truncate()
     except Exception:
         pass
     changelog_file = open(f"{current_directory}\\Temp\\changelog.txt", mode="wb")
@@ -1521,7 +1580,7 @@ if redirected_url != "https://github.com/teekar2023/EchoAI/releases/tag/v1.9.0":
         pass
     changelog_file.close()
     ChatLog.insert(END,
-                   "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.9.0 Dropdown To "
+                   "There Is A New Version Of EchoAI Available! Use The Update Button In The v1.10 Dropdown To "
                    "Download The Update Installer!\n\n")
     pass
 else:

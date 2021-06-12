@@ -356,6 +356,61 @@
       "context": [
         ""
       ]
+    },
+    {
+      "tag": "shut down device",
+      "patterns": [
+        "shut down device",
+        "shut down",
+        "turn off",
+        "turn off device",
+        "power off",
+        "power off device",
+        "shut down pc",
+        "shut down computer",
+        "turn off pc",
+        "turn off computer"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "restart device",
+      "patterns": [
+        "restart device",
+        "restart",
+        "reboot",
+        "reboot device",
+        "restart pc",
+        "restart computer",
+        "reboot pc",
+        "reboot computer"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
+    },
+    {
+      "tag": "sign out of device",
+      "patterns": [
+        "sign out",
+        "sign out of device",
+        "log out",
+        "log out of device"
+      ],
+      "responses": [
+        ""
+      ],
+      "context": [
+        ""
+      ]
     }
   ]
 }

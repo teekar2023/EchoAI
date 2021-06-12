@@ -1,13 +1,19 @@
-Version 1.9.0
-***
+Version 1.10
+---
 Description
 EchoAI Is A Simple AI Personal Assistant That Has Basic Functions! More Functions Are Actively Being Developed!
 
 Please Email Me Anytime At sree23palla@outlook.com For Help, Bug Reports, Or Suggestions!
 
 Thank You For Trying EchoAI!
-*** 
+---
+# Installation
+1. Download The Setup Installer Executable On The Releases Page
+2. Run The File And Follow Along (If a message saying "windows protected your pc" shows up, click "more info" and click "run anyway")
+3. That's It
+---
 TODO
+* Add Urban Dictionary Integration
 * Add Background Tray Icon
 * Add Global Weather
 * Ambient Noise Adjusting Setting
@@ -17,12 +23,12 @@ TODO
 * Reminders
 * Voice Commands For Timers
 * Alarms
-* Custom YouTube Music Player Integration  
+* Custom YouTube Music Player Integration
 * Switch To SocketServer
-***
+---
 Known Bugs
 NONE
-***
+---
 License
 Copyright © 2021 Sreekar Palla
 
